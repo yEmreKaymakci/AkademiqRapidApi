@@ -1,0 +1,37 @@
+﻿@model AkademiqRapidApi.Models.GasViewModel.Rootobject
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Benzin Fiyatları</title>
+</head>
+<body>
+    <h2>Avrupa Benzin Fiyatları</h2>
+    <table border="1" class="table table-bordered">
+        <tr>
+            <th>Ülke</th>
+            <th>Benzin</th>
+            <th>Dizel</th>
+            <th>LPG</th>
+            <th>Para Birimi</th>
+        </tr>
+
+        @foreach (var item in Model.result)
+        {
+            <tr>
+                <td>@item.country</td>
+                <td>@item.gasoline</td>
+                <td>@item.diesel</td>
+                <td>@item.lpg</td>
+                <td>@item.currency</td>
+            </tr>
+        }
+    </table>
+
+</body>
+</html>
