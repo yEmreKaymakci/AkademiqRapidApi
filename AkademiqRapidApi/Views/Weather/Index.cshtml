@@ -1,0 +1,23 @@
+﻿@model AkademiqRapidApi.Models.WeatherViewModel.Rootobject
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <h2> Şehir : @Model.name</h2>
+
+    <h2> Sıcaklık : @Model.main.temp</h2>
+
+    <h2> Hissedilen : @Model.main.feels_like </h2>
+
+    <h2> Durum :  @Model.weather[0].description</h2>
+
+</body>
+</html>
