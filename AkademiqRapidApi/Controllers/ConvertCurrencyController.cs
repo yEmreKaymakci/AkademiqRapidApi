@@ -6,18 +6,30 @@ namespace AkademiqRapidApi.Controllers
 {
     public class ConvertCurrencyController : Controller
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
+
+        public ConvertCurrencyController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        {
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
         public async Task<IActionResult> Index()
         {
-            var client = new HttpClient();
+            var apiKey = _configuration["RapidApi:ApiKey"];
+            var apiHost = _configuration["RapidApi:CurrencyHost"];
+
+            var client = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://fast-price-exchange-rates.p.rapidapi.com/api/v1/convert?amount=1&base_currency=EUR&quote_currency=TRY"),
+                RequestUri = new Uri($"https://{apiHost}/api/v1/convert?amount=1&base_currency=EUR&quote_currency=TRY"),
                 Headers =
-    {
-        { "x-rapidapi-key", "eaa8321078msh8aa48935ef5e1d8p1cb46fjsn6493e1885e8e" },
-        { "x-rapidapi-host", "fast-price-exchange-rates.p.rapidapi.com" },
-    },
+                {
+                    { "x-rapidapi-key", apiKey },
+                    { "x-rapidapi-host", apiHost },
+                },
             };
             using (var response = await client.SendAsync(request))
             {

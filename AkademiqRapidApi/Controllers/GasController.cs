@@ -36,7 +36,7 @@ namespace AkademiqRapidApi.Controllers
             using (var response = await client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
-                
+
                 // .NET 9 ile gelen daha kısa ve performanslı deserialization
                 var values = await response.Content.ReadFromJsonAsync<GasViewModel.Rootobject>();
 

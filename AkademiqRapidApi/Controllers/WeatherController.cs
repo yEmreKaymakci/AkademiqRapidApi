@@ -6,18 +6,30 @@ namespace AkademiqRapidApi.Controllers
 {
     public class WeatherController : Controller
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
+
+        public WeatherController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        {
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
         public async Task<IActionResult> Index()
         {
-            var client = new HttpClient();
+            var apiKey = _configuration["RapidApi:ApiKey"];
+            var apiHost = _configuration["RapidApi:WeatherHost"];
+
+            var client = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://open-weather13.p.rapidapi.com/city?city=%C4%B0stanbul&lang=TR"),
+                RequestUri = new Uri($"https://{apiHost}/city?city=%C4%B0stanbul&lang=TR"),
                 Headers =
-    {
-        { "x-rapidapi-key", "eaa8321078msh8aa48935ef5e1d8p1cb46fjsn6493e1885e8e" },
-        { "x-rapidapi-host", "open-weather13.p.rapidapi.com" },
-    },
+                {
+                    { "x-rapidapi-key", apiKey },
+                    { "x-rapidapi-host", apiHost },
+                },
             };
             using (var response = await client.SendAsync(request))
             {
