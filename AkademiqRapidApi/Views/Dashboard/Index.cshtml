@@ -1,0 +1,590 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="font-headline text-2xl font-bold tracking-tight text-on-surface">
+            Sistem Kontrol Merkezi
+        </h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/20 text-[10px] font-headline uppercase tracking-wider">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-400 pulse-dot"></span>
+            <span class="text-green-400">Sistemler Aktif</span>
+        </div>
+        <div class="font-['Space_Grotesk'] text-[11px] text-outline font-mono" id="page-clock">--:--:--</div>
+    </div>
+</div>
+
+
+<div class="grid grid-cols-12 gap-5 auto-rows-[140px]">
+
+    @* W1 - Hero Saat (4 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-4 row-span-2
+                widget-card hud-tl hud-br
+                bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 glow-cyan-inner pointer-events-none"></div>
+        <div class="relative z-10 p-6 h-full flex flex-col justify-between">
+            <span class="font-headline text-[9px] tracking-[2.5px] uppercase text-cyan-400/60">&#11044; CANLI SISTEM</span>
+            <div>
+                <div id="hero-clock"
+                     class="font-headline text-5xl font-black tracking-tight text-primary-container
+                            drop-shadow-[0_0_30px_rgba(0,242,255,.55)]">
+                    00:00:00
+                </div>
+                <div id="hero-date" class="text-[11px] text-outline mt-1 tracking-wide"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-surface-container border border-outline-variant/10 rounded p-3">
+                    <div class="text-[9px] text-outline uppercase tracking-wider mb-1">Uptime</div>
+                    <div id="uptime" class="font-headline text-sm font-bold text-on-surface font-mono">00:00:00</div>
+                    <div class="text-[9px] text-green-400 mt-0.5">&#8593; Kesintisiz</div>
+                </div>
+                <div class="bg-surface-container border border-outline-variant/10 rounded p-3">
+                    <div class="text-[9px] text-outline uppercase tracking-wider mb-1">Saat Dilimi</div>
+                    <div class="font-headline text-sm font-bold text-on-surface font-mono">UTC+3</div>
+                    <div class="text-[9px] text-outline mt-0.5">Istanbul/TR</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W2 - Hava Durumu (2 sutun x 2 satir) *@
+    <div class="bento-item col-span-6 md:col-span-3 lg:col-span-2 row-span-2
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 glow-cyan-inner pointer-events-none"></div>
+        <div class="relative z-10 p-5 h-full flex flex-col justify-between">
+            <div>
+                <div class="font-headline text-[9px] uppercase tracking-[2px] text-outline mb-3 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">thermostat</span>
+                    Hava Durumu
+                </div>
+                <div class="text-4xl mb-1">&#9925;</div>
+                <div class="font-headline text-3xl font-black text-on-surface tracking-tight">
+                    14&deg;<span class="text-lg text-outline font-normal">C</span>
+                </div>
+            </div>
+            <div>
+                <p class="font-headline text-[9px] uppercase tracking-wider text-cyan-400 mb-2">Parcali Bulutlu</p>
+                <p class="text-[9px] text-outline uppercase tracking-widest mb-2">IZMIR, TR</p>
+                <div class="space-y-1">
+                    <div class="flex justify-between text-[9px]">
+                        <span class="text-outline">Nem</span>
+                        <span class="text-on-surface-variant font-medium">62%</span>
+                    </div>
+                    <div class="flex justify-between text-[9px]">
+                        <span class="text-outline">Ruzgar</span>
+                        <span class="text-on-surface-variant font-medium">18 km/s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W3 - Doviz Kurlari (6 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 lg:col-span-6 row-span-2
+                widget-card bg-surface-container border border-outline-variant/10
+                relative overflow-hidden rounded-lg flex flex-col">
+        <div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between flex-shrink-0">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-secondary-container" style="font-size:14px">currency_exchange</span>
+                Guncel Doviz Kurlari
+            </div>
+            <span class="text-[9px] font-headline text-cyan-400/50 tracking-widest">CANLI_VERI</span>
+        </div>
+        <div class="flex-1 grid grid-cols-3 divide-x divide-outline-variant/10">
+            <div class="p-5 flex flex-col justify-between hover:bg-surface-container-high/30 transition-colors">
+                <span class="font-headline text-[9px] text-outline uppercase tracking-wider">USD / TRY</span>
+                <div>
+                    <div id="usd-val" class="font-headline text-xl font-bold text-on-surface transition-colors duration-500">38.42</div>
+                    <div class="text-[9px] text-green-400 flex items-center gap-0.5 mt-1">
+                        <span class="material-symbols-outlined" style="font-size:11px">trending_up</span>+0.21%
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 flex flex-col justify-between hover:bg-surface-container-high/30 transition-colors">
+                <span class="font-headline text-[9px] text-outline uppercase tracking-wider">EUR / TRY</span>
+                <div>
+                    <div id="eur-val" class="font-headline text-xl font-bold text-on-surface transition-colors duration-500">41.76</div>
+                    <div class="text-[9px] text-error flex items-center gap-0.5 mt-1">
+                        <span class="material-symbols-outlined" style="font-size:11px">trending_down</span>-0.12%
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 flex flex-col justify-between hover:bg-surface-container-high/30 transition-colors">
+                <span class="font-headline text-[9px] text-outline uppercase tracking-wider">GBP / TRY</span>
+                <div>
+                    <div id="gbp-val" class="font-headline text-xl font-bold text-on-surface transition-colors duration-500">49.11</div>
+                    <div class="text-[9px] text-green-400 flex items-center gap-0.5 mt-1">
+                        <span class="material-symbols-outlined" style="font-size:11px">trending_up</span>+0.05%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W4 - Kripto (3 sutun x 3 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-3 row-span-3
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg flex flex-col">
+        <div class="absolute inset-0 glow-green-inner pointer-events-none"></div>
+        <div class="relative z-10 px-5 pt-5 pb-2 border-b border-outline-variant/10 flex-shrink-0">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-green-400" style="font-size:13px">currency_bitcoin</span>
+                Kripto Piyasalari
+            </div>
+        </div>
+        <div class="relative z-10 p-5 flex-1 flex flex-col gap-3 overflow-hidden">
+            <div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
+                <div class="crypto-icon bg-yellow-500/10 border border-yellow-500/25 text-yellow-400">BTC</div>
+                <div class="flex-1 px-3">
+                    <div class="font-headline text-xs font-bold">Bitcoin</div>
+                    <div class="text-[9px] text-outline">BTC</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-headline text-sm font-bold text-green-400">$84,231</div>
+                    <div class="text-[9px] text-green-400">+2.4%</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
+                <div class="crypto-icon bg-indigo-500/10 border border-indigo-500/25 text-indigo-400">ETH</div>
+                <div class="flex-1 px-3">
+                    <div class="font-headline text-xs font-bold">Ethereum</div>
+                    <div class="text-[9px] text-outline">ETH</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-headline text-sm font-bold text-green-400">$2,186</div>
+                    <div class="text-[9px] text-green-400">+1.8%</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
+                <div class="crypto-icon bg-purple-500/10 border border-purple-500/25 text-purple-400">SOL</div>
+                <div class="flex-1 px-3">
+                    <div class="font-headline text-xs font-bold">Solana</div>
+                    <div class="text-[9px] text-outline">SOL</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-headline text-sm font-bold text-green-400">$132.45</div>
+                    <div class="text-[9px] text-green-400">+5.2%</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/10 hover:border-red-400/20 transition-colors">
+                <div class="crypto-icon bg-red-500/10 border border-red-500/25 text-red-400">XRP</div>
+                <div class="flex-1 px-3">
+                    <div class="font-headline text-xs font-bold">XRP</div>
+                    <div class="text-[9px] text-outline">XRP</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-headline text-sm font-bold text-error">$2.04</div>
+                    <div class="text-[9px] text-error">-0.9%</div>
+                </div>
+            </div>
+            <div class="mt-auto">
+                <div class="h-[3px] bg-outline-variant/20 rounded-full overflow-hidden">
+                    <div class="h-full w-[72%] progress-fill rounded-full"></div>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <span class="text-[9px] text-outline uppercase tracking-wider">Toplam Hacim</span>
+                    <span class="text-[9px] text-green-400 font-bold">$2.4T</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W5 - Akaryakit (3 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-3 row-span-2
+                widget-card hud-tl hud-br
+                bg-surface-container-high border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="p-5 h-full flex flex-col">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5 mb-4">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">local_gas_station</span>
+                Akaryakit Fiyatlari
+            </div>
+            <div class="flex-1 flex flex-col gap-2.5">
+                <div class="flex justify-between items-center p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-cyan-500/20 transition-colors">
+                    <span class="text-[11px] text-on-surface-variant">Motorin</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-headline text-sm font-bold text-primary-container">44.85 TL</span>
+                        <span class="text-[8px] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-1.5 py-0.5 rounded-full">+0.12%</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-cyan-500/20 transition-colors">
+                    <span class="text-[11px] text-on-surface-variant">Benzin</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-headline text-sm font-bold text-primary-container">43.42 TL</span>
+                        <span class="text-[8px] font-bold text-error bg-error/10 border border-error/20 px-1.5 py-0.5 rounded-full">-0.05%</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-cyan-500/20 transition-colors">
+                    <span class="text-[11px] text-on-surface-variant">LPG</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-headline text-sm font-bold text-primary-container">23.19 TL</span>
+                        <span class="text-[8px] font-bold text-green-400 bg-green-400/10 border border-green-400/20 px-1.5 py-0.5 rounded-full">+0.44%</span>
+                    </div>
+                </div>
+            </div>
+            <svg class="w-full mt-3" height="36" viewBox="0 0 200 36" fill="none">
+                <path d="M0,28 Q25,8 50,18 T100,12 T150,22 T200,14"
+                      stroke="#00dbe7" stroke-width="1.5" fill="none" opacity=".5" />
+                <path d="M0,28 Q25,8 50,18 T100,12 T150,22 T200,14 L200,36 L0,36 Z"
+                      fill="url(#fuelGrad)" opacity=".15" />
+                <defs>
+                    <linearGradient id="fuelGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#00dbe7" />
+                        <stop offset="100%" stop-color="transparent" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    </div>
+
+    @* W6 - Mac Skoru (6 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 lg:col-span-6 row-span-2
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 glow-pink-inner pointer-events-none"></div>
+        <div class="relative z-10 p-5 h-full flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+                <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:13px">sports_soccer</span>
+                    Super Lig &middot; Mac Sonucu
+                </div>
+                <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-error/10 border border-error/25">
+                    <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    <span class="font-headline text-[8px] text-error uppercase tracking-wider">Bitti</span>
+                </div>
+            </div>
+            <div class="flex-1 flex items-center justify-around px-4">
+                <div class="flex flex-col items-center gap-2 text-center w-24">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/30
+                                flex items-center justify-center font-['Space_Grotesk'] text-base font-black text-yellow-500">
+                        GS
+                    </div>
+                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider">Galatasaray</span>
+                </div>
+                <div class="text-center">
+                    <div class="font-headline text-5xl font-black text-on-surface
+                                drop-shadow-[0_0_12px_rgba(255,255,255,.15)] flex items-center gap-4">
+                        <span>3</span>
+                        <span class="text-xl text-outline-variant">:</span>
+                        <span>1</span>
+                    </div>
+                    <div class="font-headline text-[9px] text-outline uppercase tracking-wider mt-2">
+                        Super Lig &middot; 28. Hafta
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-2 text-center w-24">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30
+                                flex items-center justify-center font-['Space_Grotesk'] text-base font-black text-blue-500">
+                        FB
+                    </div>
+                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider">Fenerbahce</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W7 - Yemek Onerisi (5 sutun x 3 satir) *@
+    <div class="bento-item col-span-12 md:col-span-8 lg:col-span-5 row-span-3
+                widget-card border border-outline-variant/10
+                relative overflow-hidden rounded-lg group cursor-pointer">
+        <div class="absolute inset-0">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiWM53Q_TbaOI-1cCRp8MrZKD9pBdqQVVu4YJgRHWRIZKiJxC8spYSy56J5zSRqxnsVgamMNosYPv6lYUt_-54593ENA3bYKIu-qOhxExymajKZ2NvJmv9qwoQdefcZSVVRxLts5Oejyxo-ogxI-vBQcWuFgH-G5I5n4CbR5oIlhlooJImzo0jBNXae_MSQ8H1hoc32MktYBt_ZYhwJswxeaKty-2a49ti0ISum8_C1ALR94yeoMBFda1y-oPcTpUr7MmTn9o4DqZm"
+                 alt="Manti"
+                 class="w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/50 to-transparent"></div>
+        </div>
+        <div class="relative z-10 h-full p-7 flex flex-col justify-end">
+            <div class="flex items-center gap-1.5 mb-2">
+                <span class="material-symbols-outlined text-secondary-container" style="font-size:12px">restaurant</span>
+                <span class="font-headline text-[9px] text-secondary-container uppercase tracking-[2px]">Gunun Yemek Onerisi</span>
+            </div>
+            <h3 class="font-headline text-2xl font-bold mb-1 tracking-tight">Kayseri Mantisi</h3>
+            <p class="text-xs text-on-surface-variant mb-4 leading-relaxed line-clamp-2">
+                Yogurt, sarimsak ve tereyagli kirmizi biber sosu ile harmanlanmis geleneksel lezzet.
+            </p>
+            <div class="flex gap-4 mb-4 text-[9px] text-outline">
+                <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">schedule</span>90 dk
+                </span>
+                <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">people</span>4 kisi
+                </span>
+                <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">whatshot</span>Orta
+                </span>
+            </div>
+            <button class="w-fit flex items-center gap-2 px-4 py-2 rounded
+                           bg-primary-container text-on-primary-container
+                           font-headline text-[10px] font-bold uppercase tracking-wider
+                           shadow-[0_0_18px_rgba(0,242,255,.35)]
+                           hover:scale-105 active:scale-95 transition-transform">
+                <span class="material-symbols-outlined" style="font-size:13px">menu_book</span>
+                Tarifi Goruntule
+            </button>
+        </div>
+    </div>
+
+    @* W8 - Haberler (4 sutun x 4 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-4 row-span-4
+                widget-card bg-surface-container-high border border-outline-variant/10
+                relative overflow-hidden rounded-lg flex flex-col">
+        <div class="px-5 py-4 border-b border-outline-variant/10 flex items-center justify-between flex-shrink-0">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">newspaper</span>
+                Guncel Haberler
+            </div>
+            <span class="material-symbols-outlined text-outline hover:text-cyan-400 cursor-pointer transition-colors"
+                  style="font-size:16px">refresh</span>
+        </div>
+        <div class="flex-1 flex flex-col divide-y divide-outline-variant/10 overflow-hidden">
+            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
+                <span class="font-headline text-[8px] text-purple-400 uppercase tracking-wider block mb-1.5">TEKNOLOJI</span>
+                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
+                    Yerli kuantum islemci testleri basariyla tamamlandi.
+                </h4>
+                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
+                    <span>14 DK ONCE</span><span>64 OKUNMA</span>
+                </div>
+            </div>
+            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
+                <span class="font-headline text-[8px] text-cyan-400 uppercase tracking-wider block mb-1.5">EKONOMI</span>
+                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
+                    Merkez Bankasi yeni dijital para birimini tanitti.
+                </h4>
+                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
+                    <span>1 SAAT ONCE</span><span>128 OKUNMA</span>
+                </div>
+            </div>
+            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
+                <span class="font-headline text-[8px] text-green-400 uppercase tracking-wider block mb-1.5">SPOR</span>
+                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
+                    Milli voleybolcularimiz final yolunda.
+                </h4>
+                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
+                    <span>3 SAAT ONCE</span><span>2.4K OKUNMA</span>
+                </div>
+            </div>
+            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
+                <span class="font-headline text-[8px] text-secondary-container uppercase tracking-wider block mb-1.5">GUNDEM</span>
+                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
+                    Istanbul'da rayli sistem hatti genisletme projesi onaylandi.
+                </h4>
+                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
+                    <span>5 SAAT ONCE</span><span>891 OKUNMA</span>
+                </div>
+            </div>
+        </div>
+        <div class="p-5 border-t border-outline-variant/10 flex-shrink-0">
+            <button class="w-full py-2 border border-outline-variant/30 rounded
+                           text-[9px] font-headline uppercase tracking-wider text-outline
+                           hover:border-cyan-400/40 hover:text-cyan-400 transition-all">
+                Tum Haberleri Oku
+            </button>
+        </div>
+    </div>
+
+    @* W9 - Muzik Calar (8 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 lg:col-span-8 row-span-2
+                widget-card bg-surface-container border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 glow-pink-inner pointer-events-none"></div>
+        <div class="relative z-10 h-full flex items-center gap-6 p-6">
+            <div class="relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden
+                        shadow-[0_0_30px_rgba(255,36,228,.25)]">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsY-lgoOyHoKZLglbhRQVx2NS9bJ0LsiNYABemkYtALl_uifpKDhQrMBRNiWCu92m4W9KY6k_AMEjlbLGGmvJg8a-bidsi3eEp0PCi3CPbsVGjYnp6Rcb_ozFP1I3oIrI2GEBOaYScoJeJcgrbfPC1pZOr8RXSvuqVa2dtrWtbZseJHVTjOSEoMEdMJzWNsk26IxMkASGkFLrHPfGVuNhBAfaRNY13N8CtQGHtL_okKkSQ-SEBHSVnshPqA2U2FL1KqQVKERHffJTm"
+                     alt="Album Kapagi" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <button id="play-btn"
+                            class="w-10 h-10 rounded-full bg-secondary-container/80 backdrop-blur-sm
+                                   flex items-center justify-center
+                                   hover:scale-110 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-on-secondary-container"
+                              id="play-icon"
+                              style="font-variation-settings:'FILL' 1,'wght' 700;">pause</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="font-headline text-[9px] text-secondary-container uppercase tracking-[2px] mb-1 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined" style="font-size:11px">music_note</span>
+                    Gunun Sarkisi
+                </div>
+                <div class="font-headline text-lg font-black tracking-tight truncate">Gece Yarisi Senfonisi</div>
+                <div class="text-xs text-outline truncate mb-3">Kozmik Melodiler &amp; Orkestra</div>
+                <div class="h-[3px] bg-outline-variant/20 rounded-full overflow-hidden mb-1.5">
+                    <div id="music-progress" class="h-full progress-fill rounded-full" style="width:42%"></div>
+                </div>
+                <div class="flex justify-between font-headline text-[9px] text-outline uppercase mb-3">
+                    <span id="music-curr">1:42</span><span>3:55</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-outline hover:text-on-surface transition-colors">
+                        <span class="material-symbols-outlined" style="font-size:18px">shuffle</span>
+                    </button>
+                    <button class="text-outline hover:text-on-surface transition-colors">
+                        <span class="material-symbols-outlined" style="font-size:18px">skip_previous</span>
+                    </button>
+                    <button class="text-outline hover:text-on-surface transition-colors">
+                        <span class="material-symbols-outlined" style="font-size:18px">skip_next</span>
+                    </button>
+                    <button class="text-outline hover:text-on-surface transition-colors">
+                        <span class="material-symbols-outlined" style="font-size:18px">repeat</span>
+                    </button>
+                </div>
+            </div>
+            <div id="music-viz" class="hidden lg:flex items-end gap-[3px] h-12 mr-2"></div>
+        </div>
+    </div>
+
+    @* W10 - Film (4 sutun x 3 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-4 row-span-3
+                widget-card bg-surface-container-highest border border-outline-variant/10
+                relative overflow-hidden rounded-lg group">
+        <div class="absolute inset-0">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbgX-rLBstinumkFSr0k9yvjpUtGQTFa7esidiROmp9bHXcmR-06YO-O2UdFQ3FNNXaIuL196Csir6CINFZr6qhd6UYcRswndoBdKdo1bmiVxJYMNAsjD7fIB3Eujn5EOcsulsHASHgRzuePAN1DhwfXD-i0Orrs4ho6b56QvcvaAwUtgZCZvx6xPOncFXkth9FkXzPB8qxZIqNCvibibZVQEdwPM8Uw1U1IzK5QS_Yjm47J2a_dGh1wSi5AToilRE3C9FUoXC_8F1"
+                 alt="Yildizlararasi"
+                 class="w-full h-full object-cover opacity-15 grayscale group-hover:opacity-25 group-hover:grayscale-0 transition-all duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface-container-lowest"></div>
+        </div>
+        <div class="relative z-10 h-full p-5 flex flex-col">
+            <div class="flex justify-between items-start">
+                <div class="w-20 aspect-[2/3] rounded bg-surface-container border border-outline-variant/30
+                            overflow-hidden shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500 flex-shrink-0">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWdBlgaAmjomkO9l8tjjJddrlefkx-etiZgFADfOjOw_7by_ICo8hDlOdNO43HwLtM3oi2be7cmL3srrBI61uFYqu70iCh2ue1Uam5ZEz_w-Ey4RXa8o6VSVj0kIQSnG6VuSDhej4mNQDSCJMsUVhvYvxAEZL2J75duunsM7toGEU1V6binZsmQMeNm5-cFmE7lXsiOiJzP1hxMa894Pjd21X-eENz2A5XXXLVKsxAN3OnMU9dmN7uT00s_DPXGnek74oP6NXBPSBH"
+                         alt="" class="w-full h-full object-cover" />
+                </div>
+                <div class="text-right">
+                    <div class="text-amber-400 text-sm">8.4 / 10</div>
+                    <div class="font-headline text-xl font-black text-amber-400">IMDb</div>
+                    <div class="text-[9px] text-outline">Puan</div>
+                </div>
+            </div>
+            <div class="mt-auto">
+                <div class="font-headline text-[9px] text-cyan-400 uppercase tracking-[2px] mb-1">Gunun Populer Filmi</div>
+                <h3 class="font-headline text-xl font-bold mb-2">Yildizlararasi</h3>
+                <p class="text-[11px] text-outline leading-relaxed mb-3 line-clamp-3">
+                    Insanligin gelecegi tehlikedeyken bir grup astronot, yeni bir yuva bulmak icin solucan deliginden gecerek evrenin derinliklerine yolculuk yapar.
+                </p>
+                <div class="flex gap-2">
+                    <span class="text-[8px] px-2 py-0.5 rounded-full border border-outline-variant/30 text-outline uppercase">Bilim Kurgu</span>
+                    <span class="text-[8px] px-2 py-0.5 rounded-full border border-outline-variant/30 text-outline uppercase">Macera</span>
+                    <span class="text-[8px] px-2 py-0.5 rounded-full border border-outline-variant/30 text-outline uppercase">Drama</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W11 - BIST Hisseleri (4 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-4 row-span-2
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="p-5 h-full flex flex-col">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5 mb-4">
+                <span class="material-symbols-outlined text-amber-400" style="font-size:13px">candlestick_chart</span>
+                Borsa &middot; BIST Hisseleri
+            </div>
+            <div class="flex-1 flex flex-col gap-2.5">
+                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
+                    <div>
+                        <div class="font-headline text-xs font-bold text-cyan-400">THYAO</div>
+                        <div class="text-[9px] text-outline">Turk Hava Yollari</div>
+                    </div>
+                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
+                        <polyline points="0,16 12,12 24,8 36,10 48,5 60,3" stroke="#22c55e" stroke-width="1.2" />
+                    </svg>
+                    <div class="text-right">
+                        <div class="font-headline text-sm font-bold text-green-400">312.40</div>
+                        <div class="text-[9px] text-green-400">+3.2%</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-red-400/20 transition-colors">
+                    <div>
+                        <div class="font-headline text-xs font-bold text-cyan-400">GARAN</div>
+                        <div class="text-[9px] text-outline">Garanti Bankasi</div>
+                    </div>
+                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
+                        <polyline points="0,4 12,8 24,12 36,10 48,14 60,16" stroke="#f43f5e" stroke-width="1.2" />
+                    </svg>
+                    <div class="text-right">
+                        <div class="font-headline text-sm font-bold text-error">119.20</div>
+                        <div class="text-[9px] text-error">-1.1%</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
+                    <div>
+                        <div class="font-headline text-xs font-bold text-cyan-400">SISE</div>
+                        <div class="text-[9px] text-outline">Sisecam</div>
+                    </div>
+                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
+                        <polyline points="0,12 12,10 24,7 36,5 48,6 60,3" stroke="#22c55e" stroke-width="1.2" />
+                    </svg>
+                    <div class="text-right">
+                        <div class="font-headline text-sm font-bold text-green-400">54.85</div>
+                        <div class="text-[9px] text-green-400">+0.8%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* W12 - AI Asistan Nova (5 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 md:col-span-7 lg:col-span-5 row-span-2
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 pointer-events-none"
+             style="background:radial-gradient(ellipse at 80% 20%,rgba(0,219,231,.03) 0%,transparent 60%)"></div>
+        <div class="relative z-10 h-full flex flex-col p-5">
+            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5 mb-3">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">smart_toy</span>
+                AI Asistan &middot; Nova
+            </div>
+            <div id="ai-messages" class="flex-1 flex flex-col gap-2 overflow-hidden">
+                <div class="ai-msg-bot rounded p-2.5 text-[11px] leading-relaxed self-start max-w-[85%]">
+                    Merhaba! Ben Nova. Bugun size nasil yardimci olabilirim?
+                </div>
+                <div class="ai-msg-user rounded p-2.5 text-[11px] leading-relaxed self-end max-w-[85%]">
+                    Hava durumu nasil?
+                </div>
+                <div class="ai-msg-bot rounded p-2.5 text-[11px] leading-relaxed self-start max-w-[85%]">
+                    Izmir'de bugun 14 derece parcali bulutlu hava bekleniyor.
+                </div>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <input id="ai-input" type="text" placeholder="Nova'ya bir sey sorun..."
+                       class="flex-1 bg-surface-container border border-outline-variant/20 rounded px-3 py-2
+                              text-[11px] text-on-surface placeholder-outline/50
+                              focus:outline-none focus:border-cyan-500/40 transition-colors" />
+                <button id="ai-send"
+                        class="w-9 h-9 rounded bg-primary-container flex items-center justify-center flex-shrink-0
+                               hover:scale-110 active:scale-95 transition-transform
+                               shadow-[0_0_12px_rgba(0,242,255,.3)]">
+                    <span class="material-symbols-outlined text-on-primary-container" style="font-size:16px">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @* W13 - Motivasyon (3 sutun x 2 satir) *@
+    <div class="bento-item col-span-12 md:col-span-5 lg:col-span-3 row-span-2
+                widget-card bg-surface-container-low border border-outline-variant/10
+                relative overflow-hidden rounded-lg">
+        <div class="absolute inset-0 pointer-events-none"
+             style="background:radial-gradient(ellipse at 30% 30%,rgba(255,36,228,.05) 0%,transparent 60%)"></div>
+        <span class="material-symbols-outlined absolute top-2 right-3 text-white/[.04] pointer-events-none select-none"
+              style="font-size:80px; font-variation-settings:'FILL' 1">format_quote</span>
+        <div class="relative z-10 h-full p-7 flex flex-col items-center justify-center text-center">
+            <p class="text-sm italic text-on-surface-variant leading-relaxed mb-4">
+                "Gelecek, bugunden ona hazirlananlara aittir."
+            </p>
+            <div class="w-8 h-px bg-secondary-container mb-3"></div>
+            <span class="font-headline text-[9px] uppercase tracking-[2px] text-outline">Mustafa Kemal Ataturk</span>
+        </div>
+    </div>
+
+</div>

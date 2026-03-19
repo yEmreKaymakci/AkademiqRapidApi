@@ -1,0 +1,128 @@
+﻿<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>STRYK_OS | @ViewData["Title"]</title>
+
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+
+    <script>
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary-fixed-dim":          "#00dbe7",
+                "tertiary-fixed":             "#e9ddff",
+                "surface-container-highest":  "#32353c",
+                "on-tertiary":                "#3c0090",
+                "outline-variant":            "#3a494b",
+                "primary":                    "#e1fdff",
+                "secondary-fixed-dim":        "#fface8",
+                "on-secondary":               "#5e0053",
+                "secondary":                  "#fface8",
+                "secondary-container":        "#ff24e4",
+                "on-surface-variant":         "#b9cacb",
+                "secondary-fixed":            "#ffd7f0",
+                "surface-tint":               "#00dbe7",
+                "on-primary":                 "#00363a",
+                "on-background":              "#e1e2eb",
+                "on-secondary-fixed-variant": "#840076",
+                "error-container":            "#93000a",
+                "on-tertiary-container":      "#7318ff",
+                "surface-container-lowest":   "#0b0e14",
+                "tertiary-container":         "#e3d4ff",
+                "on-error-container":         "#ffdad6",
+                "surface-bright":             "#363940",
+                "surface-container":          "#1d2026",
+                "background":                 "#10131a",
+                "surface":                    "#10131a",
+                "on-surface":                 "#e1e2eb",
+                "outline":                    "#849495",
+                "on-primary-fixed-variant":   "#004f54",
+                "on-tertiary-fixed-variant":  "#5700c9",
+                "inverse-primary":            "#00696f",
+                "on-secondary-fixed":         "#3a0033",
+                "tertiary-fixed-dim":         "#d1bcff",
+                "surface-variant":            "#32353c",
+                "surface-container-low":      "#191c22",
+                "primary-container":          "#00f2ff",
+                "error":                      "#ffb4ab",
+                "on-error":                   "#690005",
+                "on-tertiary-fixed":          "#23005b",
+                "on-primary-fixed":           "#002022",
+                "on-secondary-container":     "#520049",
+                "surface-dim":               "#10131a",
+                "inverse-on-surface":         "#2e3037",
+                "on-primary-container":       "#006a71",
+                "inverse-surface":            "#e1e2eb",
+                "primary-fixed":              "#74f5ff",
+                "surface-container-high":     "#272a31",
+                "tertiary":                   "#fcf5ff"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body":     ["Plus Jakarta Sans"],
+                "label":    ["Space Grotesk"]
+              },
+              borderRadius: {
+                "DEFAULT": "0.125rem",
+                "lg":      "0.25rem",
+                "xl":      "0.5rem",
+                "full":    "0.75rem"
+              },
+            },
+          },
+        }
+    </script>
+
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        body {
+            background-color: #0b0e14;
+            color: #e1e2eb;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .scanline-overlay {
+            background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.05) 50%), linear-gradient(90deg, rgba(255,0,0,.01), rgba(0,255,0,.005), rgba(0,0,255,.01));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .hud-bracket-tl {
+            border-top: 2px solid #00f2ff;
+            border-left: 2px solid #00f2ff;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top: -2px;
+            left: -2px;
+        }
+
+        .hud-bracket-br {
+            border-bottom: 2px solid #ff24e4;
+            border-right: 2px solid #ff24e4;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/recipe-gallery.css" asp-append-version="true" />
+</head>
+

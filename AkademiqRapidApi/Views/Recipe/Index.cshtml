@@ -1,0 +1,107 @@
+﻿@model List<AkademiqRapidApi.Models.RecipeViewModel.Result>
+
+@{
+    ViewData["Title"] = "Lezzetli Tarifler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 px-md-4" style="max-width: 1400px; margin: 0 auto;">
+    <div class="gallery-hero">
+        <h1>Lezzet <span>Galerisi</span></h1>
+        <p>Tarifleri keşfetmek için üzerine tıklayın</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="toolbar">
+            <div class="search-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="search" id="search-input" placeholder="Tarif ara..." autocomplete="off" />
+            </div>
+            <span class="results-count" id="results-count"></span>
+        </div>
+
+        <script id="recipe-data" type="application/json">
+            [
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                        var item = Model[i];
+                        var ingredients = new List<string>();
+                        if (item.sections != null)
+                        {
+                                foreach (var sec in item.sections)
+                                {
+                                        if (sec.components != null)
+                                                foreach (var c in sec.components)
+                                                        if (!string.IsNullOrWhiteSpace(c.raw_text))
+                                                                ingredients.Add(c.raw_text);
+                                }
+                        }
+                        var steps = new List<(int pos, string text)>();
+                        if (item.instructions != null)
+                                foreach (var s in item.instructions.OrderBy(x => x.position))
+                                        steps.Add((s.position, s.display_text ?? ""));
+
+                        <text>
+                        {
+                            "id": @item.id,
+                            "name": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(item.name ?? "")),
+                            "thumbnail": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(item.thumbnail_url ?? "")),
+                            "time": @(item.total_time_minutes ?? 20),
+                            "video": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(item.original_video_url ?? "")),
+                            "ingredients": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ingredients)),
+                            "steps": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(steps.Select(s => new { pos = s.pos, text = s.text })))
+                        }@(i < Model.Count - 1 ? "," : "")
+                        </text>
+                }
+            ]
+        </script>
+
+        <div id="recipe-grid"></div>
+        <div id="pagination" class="pagination-bar"></div>
+    }
+    else
+    {
+        <div style="text-align:center; padding: 5rem 0; color: #888;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:1rem;opacity:.4">
+                <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 11H8v-2h4V8l4 4-4 4v-3z" />
+            </svg>
+            <h4 style="color:#ccc;">Gösterilecek tarif bulunamadı</h4>
+        </div>
+    }
+</div>
+
+<!-- Evrensel Modal -->
+<div class="modal-backdrop-custom" id="recipe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-panel">
+        <div class="modal-head">
+            <h5 id="modal-title"></h5>
+            <button class="modal-close" id="modal-close-btn" aria-label="Kapat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body-scroll">
+            <div class="modal-layout">
+                <div>
+                    <img id="modal-img" src="" alt="" class="modal-img" />
+                    <a id="modal-video-btn" href="#" target="_blank" class="btn-video" style="display:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                        Videolu Anlatımı İzle
+                    </a>
+                </div>
+                <div>
+                    <p class="section-label">Malzemeler</p>
+                    <ul class="ingredient-list" id="modal-ingredients"></ul>
+                    <p class="section-label" style="margin-top:4px;">Hazırlanışı</p>
+                    <ol class="steps-list" id="modal-steps"></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
