@@ -1,4 +1,5 @@
 ﻿using AkademiqRapidApi.Models;
+using AkademiqRapidApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -7,41 +8,21 @@ namespace AkademiqRapidApi.Controllers
 {
     public class GasController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
+        private readonly IGasService _gasService;
 
-        public GasController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public GasController(IGasService gasService)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
+            _gasService = gasService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var apiKey = _configuration["RapidApi:ApiKey"];
-            var apiHost = _configuration["RapidApi:GasHost"];
+            var values = await _gasService.GetAllGasAsync();
 
-            var client = _httpClientFactory.CreateClient();
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://{apiHost}/europeanCountries"),
-                Headers =
-                {
-                    { "x-rapidapi-key", apiKey },
-                    { "x-rapidapi-host", apiHost },
-                },
-            };
+            // Verileri ülke adına göre A'dan Z'ye sıralayarak gönderiyoruz
+            var sortedValues = values.OrderBy(x => x.country).ToList();
 
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-
-                // .NET 9 ile gelen daha kısa ve performanslı deserialization
-                var values = await response.Content.ReadFromJsonAsync<GasViewModel.Rootobject>();
-
-                return View(values); // Veriyi View'a göndermeyi unutma!
-            }
+            return View(sortedValues);
         }
     }
 }

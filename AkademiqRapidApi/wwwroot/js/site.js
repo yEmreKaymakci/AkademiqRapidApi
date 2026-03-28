@@ -210,3 +210,106 @@
 
 })();
 
+//Gas View için script kodları
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // --- ⛽ AKARYAKIT (GAS) SAYFASI MODÜLÜ ---
+    const gasTableBody = document.getElementById("gasTableBody");
+    const gasDataElement = document.getElementById("gasDataJson");
+
+    // Sadece Akaryakıt sayfasındaysak bu işlemleri yap (Bileşenleştirme/Componentization)
+    if (gasTableBody && gasDataElement) {
+
+        // HTML içine bıraktığımız veriyi JSON olarak JS dünyasına çekiyoruz
+        const gasData = JSON.parse(gasDataElement.textContent);
+
+        // --- SAYFALAMA (PAGINATION) MANTIĞI ---
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function displayTableData(page) {
+            gasTableBody.innerHTML = "";
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = gasData.slice(start, end);
+
+            paginatedData.forEach(item => {
+                let row = `
+                    <tr>
+                        <td class="fw-bold">${item.country}</td>
+                        <td class="text-info">${item.gasoline}</td>
+                        <td class="text-warning">${item.diesel}</td>
+                        <td>${item.lpg}</td>
+                        <td><span class="badge bg-secondary opacity-75">${item.currency}</span></td>
+                    </tr>
+                `;
+                gasTableBody.innerHTML += row;
+            });
+
+            document.getElementById("pageInfo").innerText = `Gösterilen: ${start + 1} - ${Math.min(end, gasData.length)} / Toplam: ${gasData.length}`;
+            document.getElementById("btnPrev").disabled = page === 1;
+            document.getElementById("btnNext").disabled = end >= gasData.length;
+        }
+
+        document.getElementById("btnPrev").addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTableData(currentPage);
+            }
+        });
+
+        document.getElementById("btnNext").addEventListener("click", () => {
+            if ((currentPage * rowsPerPage) < gasData.length) {
+                currentPage++;
+                displayTableData(currentPage);
+            }
+        });
+
+        // Tabloyu ilk kez yükle
+        displayTableData(currentPage);
+
+
+        // --- APEXCHARTS GRAFİK MANTIĞI ---
+        const chartContainer = document.querySelector("#gasChart");
+
+        // Eğer sayfada ApexCharts kütüphanesi yüklüyse ve chart alanı varsa çalıştır
+        if (chartContainer && typeof ApexCharts !== 'undefined') {
+            const chartData = gasData.slice(0, 15);
+            const categories = chartData.map(x => x.country);
+
+            // Fiyat formatlarını ondalık sayıya çeviriyoruz (Örn: "1,54" -> 1.54)
+            const gasolinePrices = chartData.map(x => parseFloat(x.gasoline.replace(',', '.')) || 0);
+            const dieselPrices = chartData.map(x => parseFloat(x.diesel.replace(',', '.')) || 0);
+
+            const options = {
+                series: [
+                    { name: 'Benzin', data: gasolinePrices },
+                    { name: 'Motorin', data: dieselPrices }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 400,
+                    toolbar: { show: false },
+                    foreColor: '#94a3b8' // Koyu tema yazı rengi
+                },
+                plotOptions: {
+                    bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 }
+                },
+                dataLabels: { enabled: false },
+                stroke: { show: true, width: 2, colors: ['transparent'] },
+                xaxis: { categories: categories },
+                yaxis: { title: { text: 'Ortalama Fiyat' } },
+                fill: { opacity: 1, colors: ['#38bdf8', '#fbbf24'] },
+                tooltip: {
+                    theme: 'dark',
+                    y: { formatter: function (val) { return val.toFixed(2) + " Birim" } }
+                },
+                legend: { labels: { colors: '#fff' } }
+            };
+
+            const chart = new ApexCharts(chartContainer, options);
+            chart.render();
+        }
+    }
+});
