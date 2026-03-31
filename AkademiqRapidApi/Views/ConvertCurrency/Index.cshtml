@@ -1,21 +1,64 @@
 ﻿@model AkademiqRapidApi.Models.ConvertCurrencyViewModel.Rootobject
-@{
-    Layout = null;
-}
 
-<!DOCTYPE html>
+<link rel="stylesheet" href="~/css/currency.css" />
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Exchange</title>
-</head>
-<body>
-    <h2>Döviz Sonucu</h2>
+<div class="currency-page p-4">
+    <div class="container">
+        <h2 class="mb-5 bento-item" style="color: var(--cur-cyan)">💰 Döviz Piyasası Terminali</h2>
 
-    <p>
-        1 @Model.from = @Model.to.TRY TRY
+        <div class="row g-4">
+            <div class="col-lg-4 bento-item">
+                <div class="glass-box h-100">
+                    <h5 class="mb-4 text-pink" style="color: var(--cur-pink)">Döviz Hesaplayıcı</h5>
+                    <div class="mb-3">
+                        <label class="small text-secondary">Miktar (TRY)</label>
+                        <input type="number" id="calcAmount" class="form-control calc-input" value="100">
+                    </div>
+                    <div class="mb-4">
+                        <label class="small text-secondary">Hedef Döviz</label>
+                        <select id="calcTarget" class="form-select calc-input">
+                            <option value="USD">Amerikan Doları (USD)</option>
+                            <option value="EUR">Euro (EUR)</option>
+                            <option value="GBP">İngiliz Sterlini (GBP)</option>
+                        </select>
+                    </div>
+                    <div class="p-3 rounded" style="background: rgba(0,242,255,0.05); border: 1px dashed var(--cur-cyan)">
+                        <span class="text-secondary small d-block">Sonuç:</span>
+                        <h3 id="calcResult" class="mb-0 text-white">---</h3>
+                    </div>
+                </div>
+            </div>
 
-    </p>
-</body>
-</html>
+            <div class="col-lg-8 bento-item">
+                <div class="glass-box h-100">
+                    <h5 class="mb-4">Döviz Dağılım Analizi (TRY Bazlı)</h5>
+                    <div id="currencyChart"></div>
+                </div>
+            </div>
+
+            <div class="col-12 bento-item">
+                <div class="glass-box">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0">Tüm Kurlar (1 TL Karşılığı)</h5>
+                        <div class="d-flex gap-2">
+                            <button id="prevBtn" class="btn btn-sm btn-outline-secondary">←</button>
+                            <button id="nextBtn" class="btn btn-sm btn-outline-secondary">→</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table rate-table text-white">
+                            <thead>
+                                <tr><th>Sembol</th><th>Kur Değeri</th><th>TRY Karşılığı (1 Birim)</th></tr>
+                            </thead>
+                            <tbody id="rateTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/json" id="currencyDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+<script src="~/js/currency.js"></script>

@@ -1,45 +1,23 @@
 ﻿using AkademiqRapidApi.Models;
+using AkademiqRapidApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-
+using System.Net.Http.Headers;
 namespace AkademiqRapidApi.Controllers
 {
     public class ConvertCurrencyController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
+        private readonly IConvertCurrencyService _currencyService;
 
-        public ConvertCurrencyController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public ConvertCurrencyController(IConvertCurrencyService currencyService)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
+            _currencyService = currencyService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var apiKey = _configuration["RapidApi:ApiKey"];
-            var apiHost = _configuration["RapidApi:CurrencyHost"];
-
-            var client = _httpClientFactory.CreateClient();
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://{apiHost}/api/v1/convert?amount=1&base_currency=EUR&quote_currency=TRY"),
-                Headers =
-                {
-                    { "x-rapidapi-key", apiKey },
-                    { "x-rapidapi-host", apiHost },
-                },
-            };
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-
-                // .NET 9 ile gelen daha kısa ve performanslı deserialization
-                var values = await response.Content.ReadFromJsonAsync<ConvertCurrencyViewModel.Rootobject>();
-
-                return View(values); // Veriyi View'a göndermeyi unutma!
-            }
+            var rates = await _currencyService.GetAllRatesAsync();
+            return View(rates);
         }
     }
 }

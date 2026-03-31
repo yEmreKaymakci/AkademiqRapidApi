@@ -14,6 +14,7 @@ builder.Services.AddMemoryCache();
 // 2. Servis Kaydı (Typed HttpClient Pattern - Service sınıfına otomatik HttpClient Constructor'u ekler)
 builder.Services.AddHttpClient<AkademiqRapidApi.Services.Interfaces.IRecipeService, AkademiqRapidApi.Services.RecipeService>();
 builder.Services.AddScoped<IGasService, GasService>();
+builder.Services.AddScoped<IConvertCurrencyService, ConvertCurrencyService>();
 
 var app = builder.Build();
 
