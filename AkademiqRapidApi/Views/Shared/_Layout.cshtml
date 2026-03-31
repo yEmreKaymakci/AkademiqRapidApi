@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html class="dark" lang="tr">
 
@@ -22,7 +22,7 @@
     </div>
     <script src="~/js/recipe-gallery.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

@@ -1,58 +1,88 @@
-﻿@model AkademiqRapidApi.Models.ConvertCurrencyViewModel.Rootobject
+@model AkademiqRapidApi.Models.ConvertCurrencyViewModel.Rootobject
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <link rel="stylesheet" href="~/css/currency.css" />
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <div class="currency-page p-4">
     <div class="container">
-        <h2 class="mb-5 bento-item" style="color: var(--cur-cyan)">💰 Döviz Piyasası Terminali</h2>
+        <div class="row align-items-center mb-5 bento-item">
+            <div class="col-md-8">
+                <h2 class="display-6 fw-bold" style="color: var(--cur-cyan); text-shadow: 0 0 10px rgba(0,242,255,0.3);">
+                    <span class="material-symbols-outlined align-middle me-2">payments</span> Döviz Piyasası Terminali
+                </h2>
+                <p class="text-secondary mb-0">Küresel para birimleri anlık çapraz kur verileri ve analizleri</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/Dashboard/Index" class="btn btn-outline-info px-4">Panele Dön</a>
+            </div>
+        </div>
 
         <div class="row g-4">
-            <div class="col-lg-4 bento-item">
-                <div class="glass-box h-100">
-                    <h5 class="mb-4 text-pink" style="color: var(--cur-pink)">Döviz Hesaplayıcı</h5>
-                    <div class="mb-3">
-                        <label class="small text-secondary">Miktar (TRY)</label>
-                        <input type="number" id="calcAmount" class="form-control calc-input" value="100">
+            <div class="col-lg-5 bento-item">
+                <div class="glass-box h-100 position-relative hud-tl hud-br">
+                    <h5 class="mb-4" style="color: var(--cur-pink)">Gelişmiş Kur Dönüştürücü</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="small text-secondary mb-1">Miktar</label>
+                            <input type="number" id="calcAmount" class="form-control calc-input" value="1">
+                        </div>
+                        <div class="col-6">
+                            <label class="small text-secondary mb-1">Kaynak Döviz</label>
+                            <select id="calcSource" class="form-select calc-input"></select>
+                        </div>
+                        <div class="col-6">
+                            <label class="small text-secondary mb-1">Hedef Döviz</label>
+                            <select id="calcTarget" class="form-select calc-input"></select>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="small text-secondary">Hedef Döviz</label>
-                        <select id="calcTarget" class="form-select calc-input">
-                            <option value="USD">Amerikan Doları (USD)</option>
-                            <option value="EUR">Euro (EUR)</option>
-                            <option value="GBP">İngiliz Sterlini (GBP)</option>
-                        </select>
-                    </div>
-                    <div class="p-3 rounded" style="background: rgba(0,242,255,0.05); border: 1px dashed var(--cur-cyan)">
-                        <span class="text-secondary small d-block">Sonuç:</span>
-                        <h3 id="calcResult" class="mb-0 text-white">---</h3>
+                    <div class="mt-4 p-4 rounded text-center result-area">
+                        <span class="text-secondary small d-block mb-1">Hesaplanan Tutar:</span>
+                        <h2 id="calcResult" class="mb-0 fw-bold" style="color: var(--cur-cyan)">---</h2>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-8 bento-item">
-                <div class="glass-box h-100">
-                    <h5 class="mb-4">Döviz Dağılım Analizi (TRY Bazlı)</h5>
+            <div class="col-lg-7 bento-item">
+                <div class="glass-box h-100 glow-cyan-inner">
+                    <h5 class="mb-4">Döviz Değer Analizi (1 Birim Kaç TRY?)</h5>
                     <div id="currencyChart"></div>
                 </div>
             </div>
 
             <div class="col-12 bento-item">
-                <div class="glass-box">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0">Tüm Kurlar (1 TL Karşılığı)</h5>
-                        <div class="d-flex gap-2">
-                            <button id="prevBtn" class="btn btn-sm btn-outline-secondary">←</button>
-                            <button id="nextBtn" class="btn btn-sm btn-outline-secondary">→</button>
-                        </div>
-                    </div>
+                <div class="glass-box glow-pink-inner">
+                    <h5 class="mb-4">Anlık Döviz Kurları (1 TRY Bazlı)</h5>
                     <div class="table-responsive">
-                        <table class="table rate-table text-white">
+                        <table class="table rate-table text-white mb-0">
                             <thead>
-                                <tr><th>Sembol</th><th>Kur Değeri</th><th>TRY Karşılığı (1 Birim)</th></tr>
+                                <tr>
+                                    <th>Sembol</th>
+                                    <th>Kur (1 TRY Değeri)</th>
+                                    <th>1 Birim Kaç TRY?</th>
+                                    <th class="text-end">Durum</th>
+                                </tr>
                             </thead>
-                            <tbody id="rateTableBody"></tbody>
+                            <tbody id="rateTableBody">
+                            </tbody>
                         </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
+                        <div class="text-secondary small">
+                            <span id="totalInfo" class="opacity-75"></span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <button id="prevBtn" class="btn-nav-circle"><span class="material-symbols-outlined mt-1">chevron_left</span></button>
+                            <div class="page-number-box">
+                                <span id="pageIndicator" class="fw-bold text-white">1 / 1</span>
+                            </div>
+                            <button id="nextBtn" class="btn-nav-circle"><span class="material-symbols-outlined mt-1">chevron_right</span></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,5 +90,7 @@
     </div>
 </div>
 
-<script type="application/json" id="currencyDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
-<script src="~/js/currency.js"></script>
+@section Scripts {
+    <script type="application/json" id="currencyDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+    <script src="~/js/currency.js" asp-append-version="true"></script>
+}

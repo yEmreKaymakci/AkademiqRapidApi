@@ -3,57 +3,81 @@
     --cur-card: #161b22;
     --cur-cyan: #00f2ff;
     --cur-pink: #ff24e4;
-    --cur-gold: #ffcc00;
+    --cur-border: rgba(255, 255, 255, 0.1);
 }
 
 .currency-page {
     background: var(--cur-bg);
     min-height: 100vh;
     color: #e6edf3;
-    font-family: 'Space Grotesk', sans-serif;
 }
 
 .glass-box {
     background: var(--cur-card);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 20px;
-    transition: 0.3s;
+    border: 1px solid var(--cur-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-    .glass-box:hover {
-        border-color: var(--cur-cyan);
-        box-shadow: 0 0 20px rgba(0,242,255,0.1);
-    }
-
 .calc-input {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    color: white;
+    background: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    color: white !important;
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
 }
 
     .calc-input:focus {
-        border-color: var(--cur-pink);
-        outline: none;
-        box-shadow: 0 0 10px rgba(255,36,228,0.2);
+        border-color: var(--cur-cyan) !important;
+        box-shadow: 0 0 10px rgba(0,242,255,0.2) !important;
     }
 
-.rate-table th {
+.result-area {
+    background: rgba(0,242,255,0.03);
+    border: 1px dashed rgba(0,242,255,0.2);
+}
+
+.rate-table thead th {
     color: #8b949e;
+    font-size: 11px;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid #21262d;
+    padding-bottom: 15px;
 }
 
-.rate-table td {
+.rate-table tbody td {
+    padding: 14px;
     border-bottom: 1px solid #21262d;
-    padding: 12px;
 }
 
-.main-rate-value {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--cur-cyan);
+/* Sayfalama Butonları */
+.btn-nav-circle {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--cur-border);
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+    .btn-nav-circle:hover:not(:disabled) {
+        background: var(--cur-cyan);
+        color: black;
+        box-shadow: 0 0 15px var(--cur-cyan);
+    }
+
+    .btn-nav-circle:disabled {
+        opacity: 0.1;
+        cursor: not-allowed;
+    }
+
+.page-number-box {
+    background: #0d1117;
+    border: 1px solid var(--cur-border);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 13px;
 }
