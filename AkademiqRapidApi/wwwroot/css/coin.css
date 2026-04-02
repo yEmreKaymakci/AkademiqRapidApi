@@ -1,39 +1,159 @@
-﻿:root {
-    --crypto-green: #22c55e;
+:root {
+    --crypto-green: #10b981;
+    --crypto-green-glow: rgba(16, 185, 129, 0.2);
     --crypto-red: #ef4444;
-    --crypto-bg: #06090f;
+    --crypto-bg: #0b0f19;
+    --panel-bg: rgba(17, 24, 39, 0.7);
+    --panel-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: var(--crypto-bg);
 }
 
 .coin-terminal {
-    background: var(--crypto-bg);
+    background: radial-gradient(circle at top right, #112a20 0%, #0b0f19 50%, #0b0f19 100%);
     min-height: 100vh;
+    color: #f3f4f6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.btn-coin-nav {
-    background: rgba(34, 197, 94, 0.05);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    color: var(--crypto-green);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transition: 0.3s;
+/* Glassmorphism Panels */
+.glass-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .btn-coin-nav:hover:not(:disabled) {
-        background: var(--crypto-green);
-        color: black;
-        box-shadow: 0 0 15px var(--crypto-green);
-    }
+.glass-panel:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
 
-.page-indicator-box {
-    background: rgba(255,255,255,0.05);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    border: 1px solid rgba(255,255,255,0.1);
+.glow-text {
+    background: linear-gradient(to right, #10b981, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px var(--crypto-green-glow);
 }
 
 .crypto-price {
-    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+/* Table Styles */
+.crypto-table {
+    width: 100%;
+    color: #d1d5db;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.crypto-table th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #9ca3af;
+    padding: 0 16px 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.crypto-table td {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.crypto-table tr td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.crypto-table tr td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.crypto-table tr {
+    transition: all 0.2s;
+}
+
+.crypto-table tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Coin Logo Box */
+.coin-logo-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
+    font-size: 13px;
+    background: linear-gradient(135deg, #374151, #1f2937);
+    color: white;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.coin-logo-box.highlight {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Pagination Buttons */
+.btn-coin-nav {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-coin-nav:hover:not(:disabled) {
+    background: var(--crypto-green);
+    border-color: var(--crypto-green);
+    color: #000;
+    box-shadow: 0 0 15px var(--crypto-green-glow);
+}
+
+.btn-coin-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.page-indicator-box {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.text-trend-up {
+    color: var(--crypto-green) !important;
+    font-weight: 600;
+}
+.text-trend-down {
+    color: var(--crypto-red) !important;
+    font-weight: 600;
+}
+
+/* Responsive Grid Fix */
+@media (max-width: 768px) {
+    .glass-panel { padding: 15px !important; }
 }

@@ -1,52 +1,37 @@
-﻿namespace AkademiqRapidApi.Models
+namespace AkademiqRapidApi.Models
 {
     public class CoinViewModel
     {
-
         public class Rootobject
         {
-            public string status { get; set; }
-            public Data data { get; set; }
+            public Coin[] data { get; set; }
+            public Info info { get; set; }
         }
 
-        public class Data
+        public class Info
         {
-            public Stats stats { get; set; }
-            public Coin[] coins { get; set; }
-        }
-
-        public class Stats
-        {
-            public int total { get; set; }
-            public int totalCoins { get; set; }
-            public int totalMarkets { get; set; }
-            public int totalExchanges { get; set; }
-            public string totalMarketCap { get; set; }
-            public string total24hVolume { get; set; }
+            public int coins_num { get; set; }
+            public int time { get; set; }
         }
 
         public class Coin
         {
-            public string uuid { get; set; }
+            public string id { get; set; }
             public string symbol { get; set; }
             public string name { get; set; }
-            public string color { get; set; }
-            public string iconUrl { get; set; }
-            public string marketCap { get; set; }
-            public string price { get; set; }
-            public int listedAt { get; set; }
-            public string change { get; set; }
+            public string nameid { get; set; }
             public int rank { get; set; }
-            public string[] sparkline { get; set; }
-            public bool lowVolume { get; set; }
-            public string coinrankingUrl { get; set; }
-            public string _24hVolume { get; set; }
-            public string btcPrice { get; set; }
-            public string[] contractAddresses { get; set; }
-            public bool isWrappedTrustless { get; set; }
-            public object wrappedTo { get; set; }
-            public int tier { get; set; }
+            public string price_usd { get; set; }
+            public string percent_change_24h { get; set; }
+            public string percent_change_1h { get; set; }
+            public string percent_change_7d { get; set; }
+            public string price_btc { get; set; }
+            public string market_cap_usd { get; set; }
+            public double volume24 { get; set; }
+            public double volume24a { get; set; }
+            public string csupply { get; set; }
+            public string tsupply { get; set; }
+            public string msupply { get; set; }
         }
-
     }
 }

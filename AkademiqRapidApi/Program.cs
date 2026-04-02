@@ -15,6 +15,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<AkademiqRapidApi.Services.Interfaces.IRecipeService, AkademiqRapidApi.Services.RecipeService>();
 builder.Services.AddScoped<IGasService, GasService>();
 builder.Services.AddScoped<IConvertCurrencyService, ConvertCurrencyService>();
+builder.Services.AddScoped<ICoinService, CoinService>();
 
 var app = builder.Build();
 

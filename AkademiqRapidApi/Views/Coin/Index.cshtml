@@ -1,59 +1,71 @@
-﻿@model AkademiqRapidApi.Models.CoinViewModel.Rootobject
+@model AkademiqRapidApi.Models.CoinViewModel.Rootobject
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kripto Varlık Terminali";
 }
-
-
 
 <link rel="stylesheet" href="~/css/coin.css" />
 
-<div class="coin-terminal p-4">
+<div class="coin-terminal py-5">
     <div class="container">
-        <div class="row align-items-center mb-5 bento-item">
+        <!-- Header -->
+        <div class="row align-items-center mb-5">
             <div class="col-md-8">
-                <h2 class="display-6 fw-bold" style="color: #22c55e; text-shadow: 0 0 15px rgba(34,197,94,0.3);">
-                    <i class="fa-solid fa-chart-area me-2"></i> Kripto Varlık Terminali
-                </h2>
-                <p class="text-secondary mb-0">Küresel piyasa verileri ve anlık varlık değişimleri</p>
+                <h1 class="display-5 fw-bold glow-text mb-1">
+                    <svg width="36" height="36" fill="currentColor" viewBox="0 0 16 16" class="me-2 text-success" style="vertical-align: -5px;">
+                        <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+                    </svg>
+                    Kripto Varlık Terminali
+                </h1>
+                <p class="text-secondary mb-0 fs-5">Küresel piyasa verileri ve anlık varlık değişimleri</p>
             </div>
-            <div class="col-md-4 text-end">
-                <a href="/Dashboard/Index" class="btn btn-outline-success px-4">Panele Dön</a>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="/Dashboard/Index" class="btn btn-outline-light px-4 py-2 rounded-pill shadow-sm" style="background: rgba(255,255,255,0.05); backdrop-filter: blur(5px);">
+                    <svg width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16"><path d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm5.5 10a.5.5 0 0 0 .832.374l4.5-4a.5.5 0 0 0 0-.748l-4.5-4A.5.5 0 0 0 5.5 4v8z"/></svg> 
+                    Panele Dön
+                </a>
             </div>
         </div>
 
+        <!-- Featured Coins (JavaScript injected) -->
+        <h5 class="text-white mb-3 fw-bold">Öne Çıkan Varlıklar</h5>
         <div class="row g-4 mb-5" id="featuredCoinsArea">
+            <!-- Will be populated by JS -->
         </div>
 
-        <div class="row bento-item">
+        <!-- Table View -->
+        <div class="row">
             <div class="col-12">
-                <div class="card bg-dark text-white border-secondary widget-card position-relative hud-tl hud-br glow-green-inner rounded-3">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4" style="color: #22c55e;">Piyasa Listesi</h5>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-hover align-middle mb-0">
-                                <thead>
-                                    <tr style="border-bottom: 2px solid rgba(34,197,94,0.2);">
-                                        <th>Sıra</th>
-                                        <th>Varlık</th>
-                                        <th>Fiyat (USD)</th>
-                                        <th>Piyasa Değeri</th>
-                                        <th>Değişim (24s)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="coinTableBody"></tbody>
-                            </table>
-                        </div>
+                <div class="glass-panel p-4">
+                    <h5 class="text-white fw-bold mb-4">Piyasa Listesi</h5>
+                    <div class="table-responsive">
+                        <table class="crypto-table">
+                            <thead>
+                                <tr>
+                                    <th>Sıra</th>
+                                    <th>Varlık</th>
+                                    <th>Fiyat (USD)</th>
+                                    <th class="d-none d-md-table-cell">Piyasa Değeri</th>
+                                    <th>Değişim (24s)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coinTableBody"></tbody>
+                        </table>
+                    </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
-                            <span id="coinTotalInfo" class="text-secondary small opacity-75"></span>
-                            <div class="d-flex align-items-center gap-3">
-                                <button id="coinPrevBtn" class="btn-coin-nav"><i class="fa-solid fa-arrow-left"></i></button>
-                                <div class="page-indicator-box">
-                                    <span id="coinPageIndicator" class="fw-bold">1 / 1</span>
-                                </div>
-                                <button id="coinNextBtn" class="btn-coin-nav"><i class="fa-solid fa-arrow-right"></i></button>
+                    <!-- Pagination -->
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-4 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+                        <span id="coinTotalInfo" class="text-secondary small mb-3 mb-md-0">Yükleniyor...</span>
+                        
+                        <div class="d-flex align-items-center gap-3">
+                            <button id="coinPrevBtn" class="btn-coin-nav border-0">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>
+                            </button>
+                            <div class="page-indicator-box">
+                                <span id="coinPageIndicator">1 / 1</span>
                             </div>
+                            <button id="coinNextBtn" class="btn-coin-nav border-0">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
