@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AkademiqRapidApi.Controllers
 {
+    // Dashboard sayfası hava durumu verisini WeatherController.GetCurrentLocationWeather()
+    // üzerinden AJAX ile yükler — bu controller sadece view döndürür.
     public class DashboardController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public DashboardController(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
-
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }

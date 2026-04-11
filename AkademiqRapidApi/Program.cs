@@ -16,6 +16,7 @@ builder.Services.AddHttpClient<AkademiqRapidApi.Services.Interfaces.IRecipeServi
 builder.Services.AddScoped<IGasService, GasService>();
 builder.Services.AddScoped<IConvertCurrencyService, ConvertCurrencyService>();
 builder.Services.AddScoped<ICoinService, CoinService>();
+builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 
 var app = builder.Build();
 

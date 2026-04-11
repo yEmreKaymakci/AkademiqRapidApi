@@ -1,23 +1,374 @@
-﻿@model AkademiqRapidApi.Models.WeatherViewModel.Rootobject
+@model AkademiqRapidApi.Models.WeatherViewModel.WeatherPageViewModel
+
 @{
-    Layout = null;
+    ViewData["Title"] = "Atmosfer Terminali";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var loc      = Model?.CurrentLocation;
+    var forecast = Model?.CurrentForecast;
+    var cw       = forecast?.current_weather;
+
+    // Nem — anlık saate en yakın hourly değer
+    int? humidity = null;
+    if (forecast?.hourly?.time != null)
+    {
+        var now = DateTime.UtcNow;
+        var idx = forecast.hourly.time
+            .Select((t, i) => (t, i))
+            .OrderBy(x => Math.Abs((DateTime.Parse(x.t) - now).TotalMinutes))
+            .FirstOrDefault().i;
+        humidity = forecast.hourly.relativehumidity_2m?.ElementAtOrDefault(idx);
+    }
+
+    int wx_code  = cw?.weathercode ?? 0;
+    string wx_tr = wx_code switch {
+        0    => "Açık",
+        1    => "Az Bulutlu",
+        2    => "Parçalı Bulutlu",
+        3    => "Bulutlu",
+        45   => "Sisli",
+        61   => "Hafif Yağmur",
+        63   => "Orta Yağmur",
+        65   => "Kuvvetli Yağmur",
+        71   => "Kar",
+        80   => "Sağanak",
+        95   => "Fırtına",
+        _    => "Değişken"
+    };
+
+    Func<int, string> wxEmoji = code => code switch {
+        0              => "☀️",
+        1              => "🌤️",
+        2              => "⛅",
+        3              => "☁️",
+        45 or 48       => "🌫️",
+        >= 61 and <= 67 => "🌧️",
+        >= 71 and <= 77 => "❄️",
+        >= 95          => "⛈️",
+        _              => "🌡️"
+    };
+
+    Func<int, string> wxDesc = code => code switch {
+        0              => "Açık",
+        1              => "Az Bulutlu",
+        2              => "Parçalı",
+        3              => "Bulutlu",
+        45 or 48       => "Sisli",
+        >= 61 and <= 67 => "Yağmurlu",
+        >= 71 and <= 77 => "Karlı",
+        >= 95          => "Fırtına",
+        _              => "Değişken"
+    };
 }
 
-<!DOCTYPE html>
+<link rel="stylesheet" href="~/css/weather.css" asp-append-version="true" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+@* ApexCharts: defer yerine async kullan — DOMContentLoaded tetiklendiğinde yüklenmemiş sorununu önler *@
+<script src="https://cdn.jsdelivr.net/npm/apexcharts" async></script>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <h2> Şehir : @Model.name</h2>
+<div class="wx-page">
 
-    <h2> Sıcaklık : @Model.main.temp</h2>
+    @* Dekoratif arka plan ışıkları *@
+    <div class="wx-glow-ring cyan" style="position:fixed;top:-80px;right:-80px;pointer-events:none;z-index:0;"></div>
+    <div class="wx-glow-ring pink" style="position:fixed;bottom:100px;left:-60px;pointer-events:none;z-index:0;"></div>
 
-    <h2> Hissedilen : @Model.main.feels_like </h2>
+    <div style="position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 4px;">
 
-    <h2> Durum :  @Model.weather[0].description</h2>
+        @* ── PAGE HEADER ───────────────────────────────────────────────────── *@
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+            <div>
+                <div class="wx-section-title" style="margin-bottom:4px;font-size:10px;">
+                    <span class="material-symbols-outlined" style="font-size:14px;color:var(--wx-cyan)">satellite_alt</span>
+                    ATMOSFER TERMİNALİ — CANLI VERİ
+                </div>
+                <h1 style="font-size:1.7rem;font-weight:900;color:var(--wx-text);letter-spacing:-.5px;margin:0;">
+                    Hava Durumu Merkezi
+                </h1>
+            </div>
 
-</body>
-</html>
+            @* Arama Kutusu *@
+            <div class="wx-search-wrap" style="width:min(380px, 100%);">
+                <span class="material-symbols-outlined wx-search-icon">search</span>
+                <input id="wx-city-search" type="text" class="wx-search-input"
+                       placeholder="Şehir, ülke ara (ör: Londra, Tokyo)…" />
+                <button class="wx-search-clear" id="wx-search-clear">
+                    <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+                </button>
+                <div id="wx-search-dropdown" class="wx-search-dropdown"></div>
+            </div>
+        </div>
+
+        @* ── HERO — MEVCUT KONUM ─────────────────────────────────────────── *@
+        <div class="wx-hero wx-hud wx-animate" style="padding:32px;margin-bottom:24px;">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+
+                <div>
+                    @* Konum badge *@
+                    <div class="wx-location-badge" style="margin-bottom:12px;">
+                        <span class="material-symbols-outlined" style="font-size:13px;">my_location</span>
+                        <span id="wx-loc-name">
+                            <span id="wx-loc-name-text">
+                                @(loc != null ? $"{loc.City}, {loc.CountryName}" : "Konum algılanıyor…")
+                            </span>
+                        </span>
+                        <span style="font-size:9px;opacity:.6;">IP Tabanlı</span>
+                    </div>
+
+                    <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:12px;">
+                        <div id="wx-hero-temp" class="wx-hero-temp">
+                            @(cw != null ? $"{Math.Round(cw.temperature)}°" : "--")
+                        </div>
+                        <div>
+                            <div id="wx-hero-icon" class="wx-hero-icon">@wxEmoji(wx_code)</div>
+                            <div id="wx-hero-desc" style="font-size:12px;color:var(--wx-text-dim);margin-top:4px;">@wx_tr</div>
+                        </div>
+                    </div>
+
+                    <div id="wx-hero-maxmin" style="font-size:13px;color:var(--wx-text-dim);margin-bottom:16px;">
+                        @if (forecast?.daily?.temperature_2m_max?.Count > 0)
+                        {
+                            <span>↑@(Math.Round(forecast.daily.temperature_2m_max[0]))°</span>
+                            <span style="margin:0 6px;">↓@(Math.Round(forecast.daily.temperature_2m_min[0]))°</span>
+                        }
+                    </div>
+
+                    @* Stat chips *@
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                        <div class="wx-stat-chip">
+                            <span class="label">
+                                <span class="material-symbols-outlined icon-sm">air</span> Rüzgar
+                            </span>
+                            <span class="value" id="wx-hero-wind">
+                                @(cw != null ? $"{Math.Round(cw.windspeed)} km/s" : "--")
+                            </span>
+                        </div>
+                        @if (humidity.HasValue)
+                        {
+                            <div class="wx-stat-chip">
+                                <span class="label">
+                                    <span class="material-symbols-outlined icon-sm">water_drop</span> Nem
+                                </span>
+                                <span class="value">%@humidity</span>
+                            </div>
+                        }
+                        @{
+                            var uvVal = forecast?.daily?.uv_index_max?.ElementAtOrDefault(0);
+                            if (uvVal.HasValue && uvVal.Value > 0)
+                            {
+                                <div class="wx-stat-chip">
+                                    <span class="label">
+                                        <span class="material-symbols-outlined icon-sm">wb_sunny</span> UV
+                                    </span>
+                                    <span class="value">@Math.Round(uvVal.Value, 1)</span>
+                                </div>
+                            }
+                            var rainVal = forecast?.daily?.precipitation_probability_max?.ElementAtOrDefault(0);
+                            if (rainVal.HasValue)
+                            {
+                                <div class="wx-stat-chip">
+                                    <span class="label">
+                                        <span class="material-symbols-outlined icon-sm">umbrella</span> Yağış
+                                    </span>
+                                    <span class="value">%@rainVal</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                @* 15 Günlük Liste *@
+                <div class="wx-glass" style="padding:20px;min-width:260px;max-width:340px;width:100%;">
+                    <div class="wx-section-title" style="font-size:10px;margin-bottom:12px;">
+                        <span class="material-symbols-outlined" style="font-size:13px;color:var(--wx-cyan)">event</span>
+                        15 GÜNLÜK TAHMİN
+                    </div>
+                    <div id="wx-forecast-list" class="wx-forecast-list">
+                        @if (forecast?.daily?.time != null)
+                        {
+                            for (int i = 0; i < forecast.daily.time.Count; i++)
+                            {
+                                var dayDate = forecast.daily.time[i];
+                                var todayStr = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                                var isToday  = dayDate == todayStr;
+                                var rVal     = forecast.daily.precipitation_probability_max?.ElementAtOrDefault(i);
+                                <div class="wx-forecast-row @(isToday ? "today" : "")">
+                                    <span class="day-name">
+                                        @(isToday ? "Bugün" : DateTime.Parse(dayDate).ToString("ddd d", new System.Globalization.CultureInfo("tr-TR")))
+                                    </span>
+                                    <span class="day-icon">@wxEmoji(forecast.daily.weathercode[i])</span>
+                                    <span class="day-max">@(Math.Round(forecast.daily.temperature_2m_max[i]))°</span>
+                                    <span class="day-min">@(Math.Round(forecast.daily.temperature_2m_min[i]))°</span>
+                                    @if (rVal.HasValue)
+                                    {
+                                        <span class="day-rain">💧@rVal%</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="day-rain"></span>
+                                    }
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="color:var(--wx-text-dim);font-size:12px;padding:16px 0;text-align:center;">
+                                Tahmin yükleniyor…
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        @* ── SICAKLIK TREND GRAFİĞİ ──────────────────────────────────────── *@
+        <div class="wx-glass wx-animate" style="padding:24px;margin-bottom:24px;">
+            <div class="wx-section-title">
+                <span class="material-symbols-outlined" style="font-size:14px;color:var(--wx-cyan)">show_chart</span>
+                15 GÜNLÜK SICAKLIK TRENDİ
+            </div>
+            <div id="wx-chart"></div>
+        </div>
+
+        @* ── 4 DÜNYA ŞEHRİ ────────────────────────────────────────────────── *@
+        <div class="wx-animate" style="margin-bottom:24px;">
+            <div class="wx-section-title">
+                <span class="material-symbols-outlined" style="font-size:14px;color:var(--wx-pink)">public</span>
+                DÜNYA GENELİ
+            </div>
+            <div class="wx-city-grid">
+                @if (Model?.FeaturedCities != null && Model.FeaturedCities.Any())
+                {
+                    foreach (var city in Model.FeaturedCities)
+                    {
+                        <div class="wx-city-card wx-animate">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                                <div>
+                                    <div class="city-name">@city.CityName</div>
+                                    <div class="country-code">@city.CountryCode</div>
+                                </div>
+                                <div class="city-icon">@wxEmoji(city.WeatherCode)</div>
+                            </div>
+                            @if (city.HasError)
+                            {
+                                <div style="color:var(--wx-text-dim);font-size:13px;">Veri alınamadı</div>
+                            }
+                            else
+                            {
+                                <div class="city-temp">
+                                    @(city.Temperature.HasValue ? $"{Math.Round(city.Temperature.Value)}°" : "--")
+                                </div>
+                                <div class="city-range" style="margin-top:4px;">
+                                    @wxDesc(city.WeatherCode)
+                                    @if (city.TempMax.HasValue)
+                                    {
+                                        <span> · ↑@Math.Round(city.TempMax.Value)° ↓@Math.Round(city.TempMin ?? city.TempMax.Value)°</span>
+                                    }
+                                </div>
+                                <div class="city-meta">
+                                    @if (city.WindSpeed.HasValue) { <span>💨 @Math.Round(city.WindSpeed.Value) km/s</span> }
+                                    @if (city.Humidity.HasValue)  { <span>💧 %@city.Humidity</span> }
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    for (int sk = 0; sk < 4; sk++)
+                    {
+                        <div class="wx-city-card">
+                            <div class="wx-skeleton" style="height:130px;border-radius:10px;"></div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        @* ── TÜRKİYE LOKASYONLARI ───────────────────────────────────────────── *@
+        <div id="wx-turkey-section" class="wx-animate" style="margin-bottom:32px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+                <div class="wx-section-title" style="margin-bottom:0;flex:1;">
+                    <span class="material-symbols-outlined" style="font-size:14px;color:var(--wx-green)">location_on</span>
+                    TÜRKİYE ŞEHİRLERİ
+                    <span style="font-size:10px;color:var(--wx-text-dim);font-weight:400;">
+                        (@(Model?.TurkeyTotalCount ?? 0) şehir)
+                    </span>
+                </div>
+                @* Türkiye arama *@
+                <div style="position:relative;width:220px;">
+                    <span class="material-symbols-outlined"
+                          style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--wx-text-dim);font-size:16px;pointer-events:none;">
+                        search
+                    </span>
+                    <input id="wx-turkey-search" type="text"
+                           style="width:100%;background:var(--wx-surface);border:1px solid var(--wx-border);
+                                  border-radius:10px;padding:9px 12px 9px 34px;color:var(--wx-text);
+                                  font-family:var(--wx-font);font-size:12px;outline:none;
+                                  transition:border-color .2s;"
+                           placeholder="Şehir filtrele…"
+                           onfocus="this.style.borderColor='rgba(0,200,255,.4)'"
+                           onblur="this.style.borderColor='var(--wx-border)'" />
+                </div>
+            </div>
+
+            <div id="wx-turkey-grid" class="wx-turkey-grid">
+                @if (Model?.TurkeyLocations != null && Model.TurkeyLocations.Any())
+                {
+                    foreach (var t in Model.TurkeyLocations)
+                    {
+                        <div class="wx-tr-card wx-animate"
+                             onclick="searchCityFromCard('@t.CityName')">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                <div>
+                                    <div class="tr-city">@t.CityName</div>
+                                    <div class="tr-meta">@wxDesc(t.WeatherCode)</div>
+                                </div>
+                                <div class="tr-icon">@wxEmoji(t.WeatherCode)</div>
+                            </div>
+                            @if (!t.HasError)
+                            {
+                                <div class="tr-temp">
+                                    @(t.Temperature.HasValue ? $"{Math.Round(t.Temperature.Value)}°" : "--")
+                                </div>
+                                <div class="tr-meta" style="display:flex;gap:10px;flex-wrap:wrap;">
+                                    @if (t.WindSpeed.HasValue) { <span>💨 @Math.Round(t.WindSpeed.Value) km/s</span> }
+                                    @if (t.Humidity.HasValue)  { <span>💧 %@t.Humidity</span> }
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="color:var(--wx-text-dim);font-size:11px;">Veri yok</div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    for (int sk = 0; sk < 12; sk++)
+                    {
+                        <div class="wx-tr-card">
+                            <div class="wx-skeleton" style="height:110px;border-radius:8px;"></div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div id="wx-pagination" class="wx-pagination"></div>
+        </div>
+
+    </div>@* /max-width *@
+</div>@* /wx-page *@
+
+@section Scripts {
+    <script type="application/json" id="wx-data-json">
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new {
+            currentForecast  = Model?.CurrentForecast,
+            turkeyTotalCount = Model?.TurkeyTotalCount ?? 0,
+            turkeyPageSize   = Model?.TurkeyPageSize ?? 12
+        }))
+    </script>
+    <script src="~/js/weather.js" asp-append-version="true"></script>
+}

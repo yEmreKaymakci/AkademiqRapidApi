@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -52,10 +52,11 @@
         </div>
     </div>
 
-    @* W2 - Hava Durumu (2 sutun x 2 satir) *@
-    <div class="bento-item col-span-6 md:col-span-3 lg:col-span-2 row-span-2
+    @* W2 - Hava Durumu (2 sutun x 2 satir) — AJAX ile beslenir *@
+    <div id="dashboard-weather-widget"
+         class="bento-item col-span-6 md:col-span-3 lg:col-span-2 row-span-2
                 widget-card bg-surface-container-low border border-outline-variant/10
-                relative overflow-hidden rounded-lg">
+                relative overflow-hidden rounded-lg wx-loading">
         <div class="absolute inset-0 glow-cyan-inner pointer-events-none"></div>
         <div class="relative z-10 p-5 h-full flex flex-col justify-between">
             <div>
@@ -63,22 +64,22 @@
                     <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">thermostat</span>
                     Hava Durumu
                 </div>
-                <div class="text-4xl mb-1">&#9925;</div>
-                <div class="font-headline text-3xl font-black text-on-surface tracking-tight">
-                    14&deg;<span class="text-lg text-outline font-normal">C</span>
+                <div class="text-4xl mb-1" data-wx="icon">⏳</div>
+                <div class="font-headline text-3xl font-black text-on-surface tracking-tight" data-wx="temp">
+                    --
                 </div>
             </div>
             <div>
-                <p class="font-headline text-[9px] uppercase tracking-wider text-cyan-400 mb-2">Parcali Bulutlu</p>
-                <p class="text-[9px] text-outline uppercase tracking-widest mb-2">IZMIR, TR</p>
+                <p class="font-headline text-[9px] uppercase tracking-wider text-cyan-400 mb-2" data-wx="desc">Yükleniyor…</p>
+                <p class="text-[9px] text-outline uppercase tracking-widest mb-2" data-wx="city">-- , --</p>
                 <div class="space-y-1">
                     <div class="flex justify-between text-[9px]">
                         <span class="text-outline">Nem</span>
-                        <span class="text-on-surface-variant font-medium">62%</span>
+                        <span class="text-on-surface-variant font-medium" data-wx="humidity">--</span>
                     </div>
                     <div class="flex justify-between text-[9px]">
-                        <span class="text-outline">Ruzgar</span>
-                        <span class="text-on-surface-variant font-medium">18 km/s</span>
+                        <span class="text-outline">Rüzgar</span>
+                        <span class="text-on-surface-variant font-medium" data-wx="wind">--</span>
                     </div>
                 </div>
             </div>
@@ -588,3 +589,7 @@
     </div>
 
 </div>
+
+@section Scripts {
+    <script src="~/js/weather.js" asp-append-version="true"></script>
+}
