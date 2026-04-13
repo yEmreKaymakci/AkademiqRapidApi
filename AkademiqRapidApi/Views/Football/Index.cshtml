@@ -1,0 +1,136 @@
+@model List<AkademiqRapidApi.Models.FootballViewModel.Response>
+
+@{
+    ViewData["Title"] = "Skor Merkezi · Football";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/football.css" asp-append-version="true" />
+
+<!-- ════════════════════════════════════════════════════
+     HEADER + ARAMA
+════════════════════════════════════════════════════ -->
+<div class="fb-header">
+    <div class="fb-header__left">
+        <div class="fb-header__icon">
+            <i class="fa-solid fa-futbol fa-spin-pulse"></i>
+        </div>
+        <div>
+            <h1 class="fb-header__title">Skor Merkezi</h1>
+            <p class="fb-header__sub">Global ligler &amp; anlık fikstür verileri</p>
+        </div>
+    </div>
+    <div class="fb-header__right">
+        <div class="fb-search-box" id="searchWrapper">
+            <i class="fa-solid fa-magnifying-glass fb-search-box__icon"></i>
+            <input type="text" id="matchSearch" class="fb-search-box__input"
+                   placeholder="Takım, lig veya ülke ara…" autocomplete="off" />
+            <span class="fb-search-box__clear" id="searchClear" title="Temizle">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+        </div>
+        <button class="fb-refresh-btn" id="refreshBtn" title="Yenile">
+            <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     LİG FİLTRE BUTONLARI
+════════════════════════════════════════════════════ -->
+<div class="fb-league-bar">
+    <div class="fb-league-bar__scroll">
+        <button class="fb-league-btn active" data-mode="today" data-id="">
+            <span class="fb-league-btn__emoji">🗓️</span> Bugün
+        </button>
+        <button class="fb-league-btn" data-mode="live" data-id="">
+            <span class="fb-league-btn__dot live-dot"></span> Canlı
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2021">
+            <img src="https://crests.football-data.org/PL.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Premier League
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2014">
+            <img src="https://crests.football-data.org/PD.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            La Liga
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2002">
+            <img src="https://crests.football-data.org/BL1.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Bundesliga
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2019">
+            <img src="https://crests.football-data.org/SA.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Serie A
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2015">
+            <img src="https://crests.football-data.org/FL1.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Ligue 1
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2001">
+            <img src="https://crests.football-data.org/CL.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Şampiyonlar Ligi
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2003">
+            <img src="https://crests.football-data.org/DED.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Eredivisie
+        </button>
+        <button class="fb-league-btn" data-mode="league" data-id="2017">
+            <img src="https://crests.football-data.org/PPL.png" class="fb-league-btn__logo" onerror="this.style.display='none'" />
+            Primeira Liga
+        </button>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     İSTATİSTİK KARTLARI
+════════════════════════════════════════════════════ -->
+<div class="fb-stats-bar">
+    <div class="fb-stat-card">
+        <span class="fb-stat-card__label">Toplam Maç</span>
+        <span class="fb-stat-card__val" id="statTotal">—</span>
+    </div>
+    <div class="fb-stat-card">
+        <span class="fb-stat-card__label">Canlı</span>
+        <span class="fb-stat-card__val live-color" id="statLive">—</span>
+    </div>
+    <div class="fb-stat-card">
+        <span class="fb-stat-card__label">Bitti</span>
+        <span class="fb-stat-card__val" id="statFt">—</span>
+    </div>
+    <div class="fb-stat-card">
+        <span class="fb-stat-card__label">Planlandı</span>
+        <span class="fb-stat-card__val muted-color" id="statNs">—</span>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     ANA SKOR TABLOSU
+════════════════════════════════════════════════════ -->
+<div class="fb-board">
+    <!-- Loading spinner -->
+    <div class="fb-loading" id="loadingState">
+        <div class="fb-spinner"></div>
+        <span>Maçlar yükleniyor…</span>
+    </div>
+
+    <!-- Boş durum mesajı -->
+    <div class="fb-empty" id="emptyState" style="display:none">
+        <span class="fb-empty__icon" id="emptyIcon">⚽</span>
+        <p class="fb-empty__text" id="emptyText">Gösterilecek maç bulunamadı.</p>
+        <p class="fb-empty__sub" id="emptySub">Farklı bir lig veya tarih seçin.</p>
+        <a id="emptyLink" href="https://www.football-data.org/client/register" target="_blank"
+           style="display:none; margin-top:12px; padding:8px 20px; border-radius:20px;
+                  background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.4);
+                  color:#22c55e; font-size:0.82rem; text-decoration:none;">
+            🔑 football-data.org'dan API Key Al →
+        </a>
+    </div>
+
+    <!-- Maç listesi -->
+    <div id="fixtureList" style="display:none"></div>
+</div>
+
+@section Scripts {
+<script type="application/json" id="footballDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+<script src="~/js/football.js" asp-append-version="true"></script>
+}

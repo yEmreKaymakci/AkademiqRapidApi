@@ -244,47 +244,52 @@
         </div>
     </div>
 
-    @* W6 - Mac Skoru (6 sutun x 2 satir) *@
+    @* W6 - Mac Skoru (6 sutun x 2 satir) — AJAX ile beslenir *@
     <div class="bento-item col-span-12 lg:col-span-6 row-span-2
                 widget-card bg-surface-container-low border border-outline-variant/10
-                relative overflow-hidden rounded-lg">
+                relative overflow-hidden rounded-lg"
+         id="fb-dashboard-widget">
         <div class="absolute inset-0 glow-pink-inner pointer-events-none"></div>
         <div class="relative z-10 p-5 h-full flex flex-col">
             <div class="flex items-center justify-between mb-2">
                 <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-secondary-container" style="font-size:13px">sports_soccer</span>
-                    Super Lig &middot; Mac Sonucu
+                    <span data-fb="league">Futbol &middot; Güncel Maç</span>
                 </div>
-                <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-error/10 border border-error/25">
-                    <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-                    <span class="font-headline text-[8px] text-error uppercase tracking-wider">Bitti</span>
+                <div data-fb="badge" class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-outline-variant/10 border border-outline-variant/20">
+                    <span class="font-headline text-[8px] text-outline uppercase tracking-wider">Yükleniyor…</span>
                 </div>
             </div>
             <div class="flex-1 flex items-center justify-around px-4">
-                <div class="flex flex-col items-center gap-2 text-center w-24">
-                    <div class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/30
-                                flex items-center justify-center font-['Space_Grotesk'] text-base font-black text-yellow-500">
-                        GS
-                    </div>
-                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider">Galatasaray</span>
+                <div class="flex flex-col items-center gap-2 text-center w-28">
+                    <img data-fb="homeLogo" src="" alt=""
+                         class="w-12 h-12 object-contain rounded-xl bg-surface-container border border-outline-variant/20 p-1"
+                         style="display:none" onerror="this.style.display='none'" />
+                    <div class="w-12 h-12 rounded-xl bg-outline-variant/10 border border-outline-variant/20
+                                flex items-center justify-center font-['Space_Grotesk'] text-xs font-black text-outline fb-logo-fallback"
+                         data-fb="homePlaceholder">—</div>
+                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider" data-fb="homeName">Ev Sahibi</span>
                 </div>
                 <div class="text-center">
                     <div class="font-headline text-5xl font-black text-on-surface
-                                drop-shadow-[0_0_12px_rgba(255,255,255,.15)] flex items-center gap-4">
-                        <span>3</span>
+                                drop-shadow-[0_0_12px_rgba(255,255,255,.15)] flex items-center gap-3">
+                        <span data-fb="scoreHome">—</span>
                         <span class="text-xl text-outline-variant">:</span>
-                        <span>1</span>
+                        <span data-fb="scoreAway">—</span>
                     </div>
-                    <div class="font-headline text-[9px] text-outline uppercase tracking-wider mt-2">
-                        Super Lig &middot; 28. Hafta
-                    </div>
+                    <a href="/Football" class="font-headline text-[9px] text-outline uppercase tracking-wider mt-2 block
+                                              hover:text-primary-container transition-colors">
+                        Tüm Maçlar →
+                    </a>
                 </div>
-                <div class="flex flex-col items-center gap-2 text-center w-24">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30
-                                flex items-center justify-center font-['Space_Grotesk'] text-base font-black text-blue-500">
-                        FB
-                    </div>
-                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider">Fenerbahce</span>
+                <div class="flex flex-col items-center gap-2 text-center w-28">
+                    <img data-fb="awayLogo" src="" alt=""
+                         class="w-12 h-12 object-contain rounded-xl bg-surface-container border border-outline-variant/20 p-1"
+                         style="display:none" onerror="this.style.display='none'" />
+                    <div class="w-12 h-12 rounded-xl bg-outline-variant/10 border border-outline-variant/20
+                                flex items-center justify-center font-['Space_Grotesk'] text-xs font-black text-outline"
+                         data-fb="awayPlaceholder">—</div>
+                    <span class="font-headline text-[9px] uppercase text-outline tracking-wider" data-fb="awayName">Deplasman</span>
                 </div>
             </div>
         </div>
@@ -592,4 +597,5 @@
 
 @section Scripts {
     <script src="~/js/weather.js" asp-append-version="true"></script>
+    <script src="~/js/football.js" asp-append-version="true"></script>
 }

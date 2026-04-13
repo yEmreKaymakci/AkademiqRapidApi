@@ -1,0 +1,559 @@
+/* ════════════════════════════════════════════════
+   FOOTBALL.CSS — Skor Merkezi
+   Renk paleti: Koyu zemin + lime-green vurgu
+════════════════════════════════════════════════ */
+
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --fb-bg:          #050a08;
+    --fb-surface:     #0c1410;
+    --fb-surface2:    #121c17;
+    --fb-border:      rgba(34, 197, 94, 0.12);
+    --fb-border-hover:rgba(34, 197, 94, 0.35);
+    --fb-green:       #22c55e;
+    --fb-green-glow:  rgba(34, 197, 94, 0.25);
+    --fb-green-subtle:rgba(34, 197, 94, 0.08);
+    --fb-red:         #f43f5e;
+    --fb-yellow:      #facc15;
+    --fb-cyan:        #06b6d4;
+    --fb-text:        #e2e8f0;
+    --fb-text-muted:  #64748b;
+    --fb-text-dim:    #334155;
+    --fb-live:        #ef4444;
+    --fb-radius:      14px;
+    --fb-radius-sm:   8px;
+    --fb-transition:  0.22s ease;
+}
+
+/* ════ GENEL RESET ════ */
+.fb-header, .fb-league-bar, .fb-stats-bar,
+.fb-board, .fb-fixture-group, .fb-fixture-card {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+/* ════ HEADER ════ */
+.fb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.fb-header__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.fb-header__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--fb-green-subtle), rgba(34,197,94,0.18));
+    border: 1px solid var(--fb-border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--fb-green);
+    box-shadow: 0 0 24px var(--fb-green-glow);
+}
+
+.fb-header__title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--fb-green);
+    text-shadow: 0 0 20px var(--fb-green-glow);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.fb-header__sub {
+    font-size: 0.78rem;
+    color: var(--fb-text-muted);
+    margin: 2px 0 0;
+    letter-spacing: 0.3px;
+}
+
+.fb-header__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Arama Kutusu */
+.fb-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(12, 20, 16, 0.9);
+    border: 1px solid var(--fb-border);
+    border-radius: 30px;
+    padding: 9px 18px 9px 42px;
+    width: 280px;
+    transition: border-color var(--fb-transition), box-shadow var(--fb-transition);
+}
+
+.fb-search-box:focus-within {
+    border-color: var(--fb-border-hover);
+    box-shadow: 0 0 0 3px var(--fb-green-glow), 0 0 20px rgba(34,197,94,0.1);
+}
+
+.fb-search-box__icon {
+    position: absolute;
+    left: 14px;
+    color: var(--fb-green);
+    font-size: 14px;
+}
+
+.fb-search-box__input {
+    background: transparent;
+    border: none;
+    color: var(--fb-text);
+    font-size: 0.875rem;
+    width: 100%;
+    outline: none;
+}
+
+.fb-search-box__input::placeholder { color: var(--fb-text-dim); }
+
+.fb-search-box__clear {
+    position: absolute;
+    right: 12px;
+    color: var(--fb-text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    display: none;
+    transition: color var(--fb-transition);
+}
+.fb-search-box__clear:hover { color: var(--fb-red); }
+.fb-search-box.has-value .fb-search-box__clear { display: block; }
+
+/* Yenile Butonu */
+.fb-refresh-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--fb-border);
+    background: var(--fb-surface);
+    color: var(--fb-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--fb-transition);
+    font-size: 14px;
+}
+.fb-refresh-btn:hover {
+    border-color: var(--fb-border-hover);
+    color: var(--fb-green);
+    box-shadow: 0 0 12px var(--fb-green-glow);
+}
+.fb-refresh-btn.spinning i { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ════ LİG BUTON BARI ════ */
+.fb-league-bar {
+    margin-bottom: 20px;
+}
+
+.fb-league-bar__scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--fb-border) transparent;
+}
+.fb-league-bar__scroll::-webkit-scrollbar { height: 4px; }
+.fb-league-bar__scroll::-webkit-scrollbar-track { background: transparent; }
+.fb-league-bar__scroll::-webkit-scrollbar-thumb { background: var(--fb-border); border-radius: 4px; }
+
+.fb-league-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1px solid var(--fb-border);
+    background: var(--fb-surface);
+    color: var(--fb-text-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--fb-transition);
+    letter-spacing: 0.2px;
+}
+
+.fb-league-btn:hover {
+    border-color: var(--fb-border-hover);
+    color: var(--fb-text);
+    background: var(--fb-green-subtle);
+}
+
+.fb-league-btn.active {
+    background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(34,197,94,0.1));
+    border-color: var(--fb-green);
+    color: var(--fb-green);
+    box-shadow: 0 0 14px var(--fb-green-glow);
+    font-weight: 600;
+}
+
+.fb-league-btn__logo {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* Canlı nokta */
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fb-live);
+    animation: pulse-red 1.2s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); }
+    50%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+}
+
+/* ════ İSTATİSTİK BARI ════ */
+.fb-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+@media (max-width: 640px) {
+    .fb-stats-bar { grid-template-columns: repeat(2, 1fr); }
+}
+
+.fb-stat-card {
+    background: var(--fb-surface);
+    border: 1px solid var(--fb-border);
+    border-radius: var(--fb-radius-sm);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: border-color var(--fb-transition);
+}
+.fb-stat-card:hover { border-color: var(--fb-border-hover); }
+
+.fb-stat-card__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--fb-text-muted);
+}
+
+.fb-stat-card__val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fb-text);
+}
+
+.live-color  { color: var(--fb-live) !important; }
+.muted-color { color: var(--fb-text-muted) !important; }
+
+/* ════ ANA TAHTA ════ */
+.fb-board {
+    background: var(--fb-surface);
+    border: 1px solid var(--fb-border);
+    border-radius: var(--fb-radius);
+    overflow: hidden;
+    min-height: 420px;
+}
+
+/* Loading */
+.fb-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 80px 24px;
+    color: var(--fb-text-muted);
+    font-size: 0.9rem;
+}
+
+.fb-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--fb-border);
+    border-top-color: var(--fb-green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Boş durum */
+.fb-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    gap: 8px;
+}
+.fb-empty__icon { font-size: 2.5rem; opacity: 0.3; }
+.fb-empty__text { font-size: 1rem; color: var(--fb-text-muted); margin: 0; }
+.fb-empty__sub  { font-size: 0.78rem; color: var(--fb-text-dim); margin: 0; }
+
+/* ════ FİKSTÜR GRUBU (Lig başlığı) ════ */
+.fb-fixture-group {
+    border-bottom: 1px solid var(--fb-border);
+}
+
+.fb-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--fb-border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    backdrop-filter: blur(6px);
+}
+
+.fb-group-logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.fb-group-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--fb-text);
+    letter-spacing: 0.3px;
+    flex: 1;
+}
+
+.fb-group-country {
+    font-size: 0.7rem;
+    color: var(--fb-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.fb-group-flag {
+    width: 16px;
+    height: 12px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* ════ FİKSTÜR KARTI ════ */
+.fb-fixture-card {
+    display: grid;
+    grid-template-columns: 90px 1fr auto 1fr 100px;
+    align-items: center;
+    gap: 0;
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(34,197,94,0.06);
+    transition: background var(--fb-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.fb-fixture-card:last-child { border-bottom: none; }
+
+.fb-fixture-card:hover {
+    background: rgba(34,197,94,0.04);
+}
+
+/* Animasyon: yeni kart ekleme */
+.fb-fixture-card.animate-in {
+    animation: slideIn 0.25s ease forwards;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Durum kolonu */
+.fb-col-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.fb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.fb-badge--live {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.4);
+    color: var(--fb-live);
+}
+.fb-badge--live::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--fb-live);
+    animation: pulse-red 1.2s ease-in-out infinite;
+}
+
+.fb-badge--ft {
+    background: rgba(100,116,139,0.12);
+    border: 1px solid rgba(100,116,139,0.2);
+    color: var(--fb-text-muted);
+}
+
+.fb-badge--ns {
+    background: rgba(6,182,212,0.08);
+    border: 1px solid rgba(6,182,212,0.2);
+    color: var(--fb-cyan);
+}
+
+.fb-badge--other {
+    background: rgba(250,204,21,0.1);
+    border: 1px solid rgba(250,204,21,0.25);
+    color: var(--fb-yellow);
+}
+
+.fb-fixture-minute {
+    font-size: 0.68rem;
+    color: var(--fb-text-muted);
+}
+
+/* Takım Kolonları */
+.fb-col-home {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-right: 16px;
+}
+
+.fb-col-away {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 16px;
+}
+
+.fb-team-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fb-text);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fb-team-name.winner {
+    color: var(--fb-green);
+}
+
+.fb-team-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.03);
+    padding: 2px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Skor Kolonu */
+.fb-col-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 90px;
+}
+
+.fb-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--fb-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.fb-score.live-score { color: var(--fb-green); text-shadow: 0 0 12px var(--fb-green-glow); }
+.fb-score-sep { color: var(--fb-text-dim); font-weight: 400; font-size: 1.1rem; }
+
+.fb-score-ht {
+    font-size: 0.65rem;
+    color: var(--fb-text-muted);
+    letter-spacing: 0.3px;
+}
+
+/* Venue / Bilgi kolonu */
+.fb-col-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.fb-col-info .fb-venue {
+    font-size: 0.68rem;
+    color: var(--fb-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 95px;
+}
+
+.fb-col-info .fb-date-time {
+    font-size: 0.7rem;
+    color: var(--fb-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ════ RESPONSİVE ════ */
+@media (max-width: 768px) {
+    .fb-fixture-card {
+        grid-template-columns: 70px 1fr auto 1fr;
+    }
+    .fb-col-info { display: none; }
+    .fb-team-name { max-width: 100px; font-size: 0.8rem; }
+    .fb-score { font-size: 1.2rem; }
+    .fb-header { flex-direction: column; align-items: flex-start; }
+    .fb-search-box { width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .fb-fixture-card {
+        grid-template-columns: 60px 1fr 80px 1fr;
+        padding: 10px 12px;
+    }
+    .fb-team-logo { width: 26px; height: 26px; }
+    .fb-team-name { max-width: 80px; font-size: 0.75rem; }
+}
