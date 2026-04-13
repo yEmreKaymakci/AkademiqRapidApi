@@ -1,0 +1,352 @@
+/* music.css — Müzik Kütüphanesi Tasarımı */
+
+:root {
+    --music-primary: #1ed760; /* Spotify yeşil / Deezer mor tonu yerine yeşil seçildi */
+    --music-primary-glow: rgba(30, 215, 96, 0.4);
+    --music-dark-bg: #121212;
+    --music-surface: #181818;
+    --music-surface-highlight: #282828;
+    --music-border: rgba(255, 255, 255, 0.08);
+}
+
+.music-terminal {
+    background: var(--music-dark-bg);
+    min-height: 100vh;
+    color: #fff;
+    padding-bottom: 8rem; /* Alttaki Mini Player için boşluk */
+}
+
+/* Üst Header */
+.music-header-box {
+    background: var(--music-surface);
+    border: 1px solid var(--music-border);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.music-header-box::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 250px;
+    height: 250px;
+    background: var(--music-primary-glow);
+    filter: blur(100px);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.music-categories {
+    display: flex;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-music-category {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--music-border);
+    color: #b3b3b3;
+    padding: 8px 20px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn-music-category:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-music-category.active {
+    background: var(--music-primary);
+    color: #000;
+    border-color: var(--music-primary);
+    box-shadow: 0 0 15px var(--music-primary-glow);
+}
+
+/* Şarkı Listesi Tablosu / Grid */
+.music-track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.music-track-card {
+    background: transparent;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.3s ease;
+}
+
+.music-track-card:hover {
+    background: var(--music-surface-highlight);
+}
+
+/* Şarkı Çalınıyor Efekti */
+.music-track-card.playing {
+    background: rgba(30, 215, 96, 0.1);
+}
+
+.music-track-card.playing .m-title {
+    color: var(--music-primary);
+}
+
+.m-number {
+    width: 20px;
+    text-align: center;
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.music-track-card:hover .m-number {
+    color: #fff;
+}
+
+.m-cover-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.m-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Oynatma Animasyonu Butonu */
+.m-play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.music-track-card:hover .m-play-overlay {
+    opacity: 1;
+}
+
+.music-track-card.playing .m-play-overlay {
+    opacity: 1;
+    background: rgba(0,0,0,0.4);
+}
+
+.m-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0; /* truncate desteklemek için */
+}
+
+.m-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.m-artist {
+    font-size: 0.85rem;
+    color: #b3b3b3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-album-name {
+    flex: 0 0 25%;
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-duration {
+    flex: 0 0 50px;
+    text-align: right;
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Alt Sabit Ses Oynatıcı (Mini Player) */
+.music-global-player {
+    position: fixed;
+    bottom: 0;
+    left: 16rem; /* Sidebar genişliği kadarı (ml-64 = 16rem) */
+    right: 0;
+    height: 90px;
+    background: var(--music-surface);
+    border-top: 1px solid var(--music-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    z-index: 50;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.music-global-player.active {
+    transform: translateY(0);
+}
+
+.gp-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 30%;
+    min-width: 200px;
+}
+
+.gp-cover {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.gp-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.gp-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gp-artist {
+    font-size: 0.8rem;
+    color: #b3b3b3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gp-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+
+.gp-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.gp-btn {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.gp-btn:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.gp-play-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+}
+
+.gp-play-btn:hover {
+    transform: scale(1.05);
+    background: var(--music-primary);
+}
+
+/* Ses ve bar çizgileri */
+.gp-progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.gp-time {
+    font-size: 0.75rem;
+    color: #b3b3b3;
+}
+
+.gp-progress-bar {
+    height: 4px;
+    background: #4d4d4d;
+    border-radius: 2px;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.gp-progress-fill {
+    height: 100%;
+    background: #fff;
+    width: 0%; /* JS ile dolacak */
+    transition: width 0.1s linear;
+}
+
+.music-track-card:hover .gp-progress-fill {
+    background: var(--music-primary);
+}
+
+.gp-right {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Loading Spin */
+.music-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+}
+
+@media (max-width: 991px) {
+    .music-global-player { left: 0; }
+    .m-album-name { display: none; }
+}

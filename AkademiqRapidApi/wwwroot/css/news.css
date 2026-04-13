@@ -1,0 +1,382 @@
+/* news.css — Haber Merkezi Tasarımı (Glassmorphism & Bento) */
+
+/* Modern Futbol stiline benzer tasarım değişkenleri */
+:root {
+    --news-purple: #c084fc;
+    --news-purple-glow: rgba(192, 132, 252, 0.4);
+    --news-purple-bg: rgba(192, 132, 252, 0.1);
+    
+    --news-card-bg: var(--surface-container-low, #111116);
+    --news-border: rgba(255, 255, 255, 0.08);
+    --news-card-hover: rgba(192, 132, 252, 0.15);
+}
+
+.news-terminal {
+    background: transparent;
+    min-height: 100vh;
+    color: var(--on-surface);
+    padding-bottom: 3rem;
+}
+
+/* Bento Header & Üst Başlık */
+.news-header-box {
+    background: var(--surface-container-low);
+    border: 1px solid var(--news-border);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.news-header-box::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: var(--news-purple-glow);
+    filter: blur(80px);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Category Buttons */
+.news-categories {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+    align-items: center;
+}
+
+.btn-category {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--news-border);
+    color: var(--on-surface-variant);
+    padding: 8px 20px;
+    border-radius: 30px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.btn-category:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--on-surface);
+}
+
+.btn-category.active {
+    background: var(--news-purple-bg);
+    border-color: var(--news-purple);
+    color: var(--news-purple);
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.2);
+    text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+}
+
+/* CAROUSEL YAPI */
+.news-carousel-layout {
+    width: 100%;
+    /* Faded görünüm için mask, sol ve sağ uçlarda transparanlık */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    padding: 10px 0; /* Gölge ve hover effect için yeterli taşma payı */
+}
+
+.news-carousel-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto; /* Yatay scroll */
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* Kartları yerlerine oturtur */
+    scrollbar-width: none; /* Firefox için gizleme */
+    -ms-overflow-style: none; /* IE için gizleme */
+    padding: 10px 5%; /* İlk ve son kartın dış çepere tam yapışmaması ve peek imkanı */
+}
+.news-carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari için gizleme */
+}
+
+/* Kart Genel Yapısı */
+.news-card-wrapper {
+    /* Ekrana ortalama 3-4 kart sığması + Peek efekti için sabit/yarı esnek genişlik */
+    flex: 0 0 320px;
+    scroll-snap-align: center; /* Merkeze yapışır, böylece sağda/solda yarı-görünen (peek) kartlar olur */
+    height: auto;
+}
+
+.news-card {
+    background: var(--surface-container-lowest);
+    border: 1px solid var(--news-border);
+    border-radius: 24px;
+    overflow: hidden;
+    height: 100%; /* Standart boyut */
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    text-decoration: none !important;
+}
+
+.news-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%, rgba(192, 132, 252, 0.05));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 30px rgba(192, 132, 252, 0.1);
+}
+
+.news-card:hover::before {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.4), transparent 50%, rgba(192, 132, 252, 0.1));
+}
+
+.news-img-box {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0; /* Resmin küçülmesini engelle */
+}
+
+.news-img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+}
+
+.news-card:hover .news-img {
+    transform: scale(1.05);
+}
+
+.news-img-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, var(--surface-container-lowest), transparent);
+    pointer-events: none;
+}
+
+.news-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+}
+
+/* Hero (Öne Çıkan) Haber Spesifik */
+.news-hero-card {
+    flex-direction: row;
+    height: 400px;
+}
+
+.news-hero-card .news-img-box {
+    width: 60%;
+    height: 100%;
+}
+
+.news-hero-card .news-img {
+    height: 100%;
+    min-height: 400px;
+}
+
+.news-hero-card .news-img-overlay {
+    background: linear-gradient(to right, var(--surface-container-lowest), transparent);
+    top: 0; bottom: 0; left: auto; right: 0;
+    width: 60%; height: auto;
+}
+
+.news-hero-card .news-content {
+    width: 40%;
+    justify-content: center;
+    padding: 2.5rem;
+}
+
+@media (max-width: 991px) {
+    .news-hero-card {
+        flex-direction: column;
+        height: auto;
+    }
+    .news-hero-card .news-img-box, .news-hero-card .news-content {
+        width: 100%;
+    }
+    .news-hero-card .news-img {
+        min-height: 250px;
+    }
+    .news-hero-card .news-img-overlay {
+        background: linear-gradient(to top, var(--surface-container-lowest), transparent);
+        height: 60%; width: 100%;
+        top: auto;
+    }
+    
+    .news-carousel-track {
+        padding: 5px; /* Mobilde fazlalığı azalt */
+        gap: 1rem;
+    }
+    .news-card-wrapper {
+        flex: 0 0 85%; /* Mobilde 1 kart + biraz yanlardaki peek gözüksün */
+    }
+}
+
+/* Tipografi ve Standart Boyutlamalar */
+.news-source {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--news-purple);
+    margin-bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(192, 132, 252, 0.1);
+    border-radius: 4px;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.news-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--on-surface);
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Sadece 2 satır, fazlası '...' olur */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 3.3rem; /* 2 satır için sabit yükseklik */
+    transition: color 0.3s ease;
+}
+
+.news-hero-card .news-title {
+    font-size: 2rem;
+    -webkit-line-clamp: 3;
+    height: auto; /* hero card esnek kalabilir */
+}
+
+.news-card:hover .news-title {
+    color: var(--news-purple);
+}
+
+.news-desc {
+    font-size: 0.95rem;
+    color: var(--on-surface-variant);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Detay 3 satır */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 4.8rem; /* 3 satırlık sabit boşluk ayırma */
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+}
+
+.news-meta {
+    margin-top: auto; /* Flex büyümeyi kullanıp bunu en alta yapıştırır */
+    font-size: 0.85rem;
+    color: var(--on-surface-variant);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+/* Yükleniyor Durumu */
+.news-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 0;
+    width: 100%;
+}
+
+.news-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(192, 132, 252, 0.2);
+    border-top-color: var(--news-purple);
+    border-radius: 50%;
+    animation: news-spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes news-spin { to { transform: rotate(360deg); } }
+
+/* Alt Sayfalama Kutusu */
+.news-footer-box {
+    background: var(--surface-container-low);
+    border: 1px solid var(--news-border);
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.btn-news-nav {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--news-border);
+    color: var(--on-surface);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-news-nav:hover:not(:disabled) {
+    background: var(--news-purple);
+    border-color: var(--news-purple);
+    color: #000;
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+    transform: scale(1.05);
+}
+
+.btn-news-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: transparent;
+}
+
+.page-indicator-box {
+    padding: 0.5rem 1.25rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: 1px solid var(--news-border);
+}

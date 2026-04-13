@@ -1,0 +1,67 @@
+@model List<AkademiqRapidApi.Models.QuoteViewModel.QuoteItem>
+
+@{
+    ViewData["Title"] = "Motivasyon Kütüphanesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/motivation.css" />
+
+<div class="motivation-terminal">
+    <div class="container-fluid max-w-7xl mx-auto pt-4">
+
+        <!-- Header -->
+        <div class="quote-header animate-in">
+            <h2 class="display-5 fw-bold mb-3" style="color: #fff; font-family: Georgia, serif; font-style: italic;">Günün İlham Panosu</h2>
+            <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                Tarihe yön veren liderlerin, sanatçıların ve düşünürlerin zihin dünyasına yolculuk. (FavQs API & Google Translate)
+            </p>
+        </div>
+
+        <div class="quote-grid animate-in" id="quoteLibraryGrid" style="--animate-delay: 0.2s">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var quote in Model)
+                {
+                    <div class="quote-card">
+                        <div class="q-actions">
+                            <button class="btn-q-action" title="Beğen" onclick="this.style.color='#ef4444'"><span class="material-symbols-outlined" style="font-size:16px;">favorite</span></button>
+                            <button class="btn-q-action" title="Panoya Kopyala" onclick="copyToClipboard('@quote.TranslatedBody.Replace("'", "\\'")')"><span class="material-symbols-outlined" style="font-size:16px;">content_copy</span></button>
+                        </div>
+                        
+                        <div class="q-original">@quote.body</div>
+                        <div class="q-translated">@quote.TranslatedBody</div>
+                        
+                        <div class="mt-4 flex justify-between items-end">
+                            <div class="q-author">@quote.author</div>
+                        </div>
+
+                        <!-- Badge if popular -->
+                        @if (quote.upvotes_count > 5)
+                        {
+                            <div class="q-badge">POPÜLER</div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center text-muted col-span-full py-5">
+                    Kitaplık yüklenemedi veya internet bağlantısında sorun var.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert("Özlü söz başarıyla panoya kopyalandı!");
+            }, function(err) {
+                console.error('Kopyalama basarisiz: ', err);
+            });
+        }
+    </script>
+}

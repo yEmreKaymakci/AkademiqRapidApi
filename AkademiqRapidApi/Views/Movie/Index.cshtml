@@ -1,0 +1,54 @@
+@model List<AkademiqRapidApi.Models.MovieViewModel.Result>
+
+@{
+    ViewData["Title"] = "Film Kütüphanesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/movie.css" />
+
+<div class="movie-terminal">
+    <div class="container-fluid max-w-7xl mx-auto pt-4">
+
+        <!-- Üst Header & Kategoriler -->
+        <div class="movie-header-box animate-in">
+            <div>
+                <h2 class="display-6 fw-bold mb-1 flex items-center gap-2" style="color: var(--on-surface);">
+                    <span class="material-symbols-outlined" style="color: var(--movie-primary); font-size: 2.2rem;">movie</span> Kütüphane
+                </h2>
+                <p class="mb-0" style="color: var(--on-surface-variant)">Günün trendleri ve efsane yapımlar</p>
+            </div>
+            
+            <div class="movie-categories">
+                <!-- TMDB Kategori Sekmeleri -->
+                <button class="btn-category active" onclick="filterMovieCategory('popular', this)">Popüler</button>
+                <button class="btn-category" onclick="filterMovieCategory('trending', this)">Günün Trendleri</button>
+                <button class="btn-category" onclick="filterMovieCategory('top_rated', this)">En İyiler</button>
+                <button class="btn-category" onclick="filterMovieCategory('upcoming', this)">Yakında</button>
+                <button class="btn-category flex items-center justify-center gap-1" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4)" onclick="filterMovieCategory('favorites', this)">
+                    <span class="material-symbols-outlined" style="font-size: 1rem">favorite</span> Favorilerim
+                </button>
+                
+                <a href="/Dashboard/Index" class="btn-category flex items-center justify-center gap-2 ms-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white;">
+                    <span class="material-symbols-outlined" style="font-size: 1.1rem;">arrow_back</span> Panele Dön
+                </a>
+            </div>
+        </div>
+
+        <!-- Spinner -->
+        <div id="movieLoading" class="movie-loading">
+            <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Yükleniyor...</span>
+            </div>
+        </div>
+
+        <!-- Dinamik İçerik Konteyneri -->
+        <div id="movieMainContainer"></div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script type="application/json" id="movieDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+    <script src="~/js/movie.js" asp-append-version="true"></script>
+}

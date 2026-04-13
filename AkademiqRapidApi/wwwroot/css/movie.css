@@ -1,0 +1,310 @@
+/* movie.css — Film Kütüphanesi (Netflix/Prime Stili Glassmorphism) */
+
+:root {
+    --movie-primary: #dc2626; /* TMDB/Netflix stili kırmızı */
+    --movie-primary-glow: rgba(220, 38, 38, 0.4);
+    --movie-dark-bg: #09090b;
+    --movie-card-bg: #18181b;
+    --movie-border: rgba(255, 255, 255, 0.08);
+}
+
+.movie-terminal {
+    background: var(--movie-dark-bg);
+    min-height: 100vh;
+    color: #fff;
+    padding-bottom: 4rem;
+}
+
+/* Header & Tabs */
+.movie-header-box {
+    background: var(--surface-container-low, #111116);
+    border: 1px solid var(--movie-border);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.movie-header-box::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: var(--movie-primary-glow);
+    filter: blur(80px);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.movie-categories {
+    display: flex;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+}
+
+.btn-category {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--movie-border);
+    color: #a1a1aa;
+    padding: 8px 18px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    backdrop-filter: blur(8px);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.btn-category:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.btn-category.active {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: var(--movie-primary);
+    color: var(--movie-primary);
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+}
+
+/* Hero Section (Arkaplan Full Genişlik Backdrop) */
+.movie-hero-section {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    border: 1px solid var(--movie-border);
+    display: flex;
+    align-items: center;
+}
+
+.movie-hero-backdrop {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Hero üzerindeki gradient (Yazıların okunması için soldan sağa ve alttan üste karanlık) */
+.movie-hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to right, rgba(9, 9, 11, 0.95) 0%, rgba(9, 9, 11, 0.7) 40%, transparent 100%),
+                linear-gradient(to top, rgba(9, 9, 11, 1) 0%, transparent 30%);
+    z-index: 2;
+}
+
+.movie-hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 3rem;
+    max-width: 600px;
+}
+
+.movie-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 1.1;
+}
+
+.movie-hero-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #e4e4e7;
+}
+
+.movie-hero-rating {
+    background: rgba(220, 38, 38, 0.2);
+    color: #fca5a5;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgba(220, 38, 38, 0.4);
+}
+
+.movie-hero-desc {
+    font-size: 1.05rem;
+    color: #a1a1aa;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+/* Movie Carousel Grid */
+.movie-carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.movie-carousel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-left: 4px solid var(--movie-primary);
+    padding-left: 10px;
+}
+
+/* CAROUSEL TRACK */
+.movie-scroll-wrapper {
+    position: relative;
+    margin-bottom: 3rem;
+    /* Kenar fade effect */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+}
+
+.movie-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 10px 2%;
+    scrollbar-width: none; /* Firefox */
+}
+
+.movie-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+/* Poster Kartı */
+.movie-card {
+    flex: 0 0 220px; /* Poster genişliği */
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: var(--movie-card-bg);
+    aspect-ratio: 2 / 3;
+    border: 1px solid var(--movie-border);
+}
+
+.movie-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+/* Kart Hover Efekti */
+.movie-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    z-index: 10;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px var(--movie-primary-glow);
+    border-color: rgba(220, 38, 38, 0.4);
+}
+
+.movie-card:hover .movie-card-img {
+    transform: scale(1.1);
+}
+
+/* Hover'da alttan çıkan detay kutusu */
+.movie-detail-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(9, 9, 11, 0.95) 0%, rgba(9, 9, 11, 0.8) 50%, transparent 100%);
+    padding: 2rem 1rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.movie-card:hover .movie-detail-overlay {
+    transform: translateY(0);
+}
+
+.m-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-rating {
+    font-size: 0.85rem;
+    color: #fbbf24; /* Yıldız sarısı */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Nav Hooks */
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.carousel-nav-btn:hover {
+    background: var(--movie-primary);
+    border-color: var(--movie-primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-btn.prev { left: 10px; }
+.carousel-nav-btn.next { right: 10px; }
+
+/* Loading State */
+.movie-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+.spinner-border {
+    color: var(--movie-primary);
+}
+
+@media (max-width: 768px) {
+    .movie-hero-title { font-size: 2rem; }
+    .movie-hero-content { padding: 1.5rem; }
+    .movie-card { flex: 0 0 160px; }
+}

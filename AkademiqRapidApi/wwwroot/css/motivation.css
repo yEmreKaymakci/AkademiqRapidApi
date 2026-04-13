@@ -1,0 +1,160 @@
+/* motivation.css — Motivasyon ve Özlü Sözler Modülü */
+:root {
+    --quote-bg: #f8f6f0;       /* Kağıt dokusu hissiyatı */
+    --quote-ink: #2c3e50;      /* Mürekkep laciverti / grisi */
+    --quote-accent: #d35400;   /* Mühür turuncusu */
+    --quote-surface: rgba(255, 255, 255, 0.05); /* Dark mode card opacity */
+    --quote-border: rgba(255, 255, 255, 0.1);
+}
+
+.motivation-terminal {
+    min-height: 100vh;
+    padding-bottom: 4rem;
+}
+
+/* Header Tasarımı */
+.quote-header {
+    position: relative;
+    padding: 3rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(30,41,59,0.7), rgba(15,23,42,0.9)), url('https://placehold.co/1200x300/1e293b/0f172a?text=Inspiration') center/cover;
+    border: 1px solid var(--quote-border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    text-align: center;
+}
+
+.quote-header::after {
+    content: '"';
+    position: absolute;
+    right: 2rem;
+    top: -2rem;
+    font-size: 15rem;
+    font-family: Georgia, serif;
+    color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
+
+/* Masonry / Grid Düzeni */
+.quote-grid {
+    column-count: 1;
+    column-gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .quote-grid { column-count: 2; }
+}
+@media (min-width: 1024px) {
+    .quote-grid { column-count: 3; }
+}
+
+/* Quote Card - Glassmorphism & Kaligrafi */
+.quote-card {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    background: var(--quote-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--quote-border);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quote-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Söz İngilizce (Orijinal) - Ufak ve Silik */
+.q-original {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+/* Söz Türkçe (Çeviri) - Vurgulu Serif */
+.q-translated {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #f8fafc;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+/* Tırnak İsareti Dekorasyonu */
+.q-translated::before {
+    content: '“';
+    font-size: 2rem;
+    color: var(--quote-accent);
+    position: absolute;
+    left: -1rem;
+    top: -0.5rem;
+    opacity: 0.5;
+}
+
+/* Yazar Kısmı */
+.q-author {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--quote-accent);
+    border-bottom: 1px solid rgba(211, 84, 0, 0.3);
+    padding-bottom: 4px;
+}
+
+/* Sağ Üst Aksiyon (Beğen / Kopyala) */
+.q-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.quote-card:hover .q-actions {
+    opacity: 1;
+}
+
+.btn-q-action {
+    background: rgba(0,0,0,0.2);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-q-action:hover {
+    background: var(--quote-accent);
+    transform: scale(1.1);
+}
+
+.q-badge {
+    position: absolute;
+    bottom: -15px;
+    right: 2rem;
+    background: var(--quote-accent);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(211, 84, 0, 0.4);
+}

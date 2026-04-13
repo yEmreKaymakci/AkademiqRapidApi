@@ -1,0 +1,82 @@
+@model List<AkademiqRapidApi.Models.NewsViewModel.Article>
+
+@{
+    ViewData["Title"] = "Haber Merkezi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/news.css" />
+
+<div class="news-terminal p-4">
+    <div class="container-fluid max-w-7xl mx-auto">
+        
+        <!-- Üst Header & Kategoriler -->
+        <div class="news-header-box mb-4 animate-in">
+            <div>
+                <h2 class="display-6 fw-bold mb-1 flex items-center gap-2" style="color: var(--on-surface);">
+                    <span class="material-symbols-outlined" style="color: var(--news-purple); font-size: 2.2rem;">newspaper</span> Haber Merkezi
+                </h2>
+                <p class="mb-0" style="color: var(--on-surface-variant)">Global ve yerel anlık medya akışı</p>
+            </div>
+            
+            <div class="news-categories">
+                <!-- Data API için Türkçe kategoriler -->
+                <button class="btn-category active" onclick="filterCategory('general', this)">Gündem</button>
+                <button class="btn-category" onclick="filterCategory('technology', this)">Teknoloji</button>
+                <button class="btn-category" onclick="filterCategory('business', this)">Ekonomi</button>
+                <button class="btn-category" onclick="filterCategory('sports', this)">Spor</button>
+                <button class="btn-category" onclick="filterCategory('health', this)">Sağlık</button>
+                <button class="btn-category" onclick="filterCategory('science', this)">Bilim</button>
+                <a href="/Dashboard/Index" class="btn-category flex items-center justify-center gap-2" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white;">
+                    <span class="material-symbols-outlined" style="font-size: 1.1rem;">arrow_back</span> Panele Dön
+                </a>
+            </div>
+        </div>
+
+        <!-- Yükleniyor Göstergesi -->
+        <div id="newsLoading" class="news-loading" style="display: none;">
+            <div class="news-loading-spinner"></div>
+            <p class="text-secondary tracking-widest uppercase text-sm mt-3">Haberler Çekiliyor...</p>
+        </div>
+
+        <!-- Hero (Ana) Haber Alanı -->
+        <div class="mb-5" id="heroNewsArea">
+            <!-- JavaScript tarafından render edilecek -->
+        </div>
+
+        <!-- Carousel (Diğer) Haber Alanı -->
+        <div class="news-carousel-layout position-relative" style="display: none;" id="newsCarouselLayout">
+             <div class="news-carousel-track" id="newsGridArea">
+                <!-- JavaScript tarafından render edilecek -->
+             </div>
+        </div>
+
+        <!-- Sayfalama (Footer) -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="news-footer-box" id="newsFooterNav" style="display: none;">
+                    <span id="newsTotalInfo" class="text-secondary"></span>
+                    
+                    <div class="d-flex align-items-center gap-3">
+                        <button id="newsPrevBtn" class="btn-news-nav" title="Geri Kaydır">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <div class="page-indicator-box">
+                            <span id="newsPageIndicator">CAROUSEL</span>
+                        </div>
+                        <button id="newsNextBtn" class="btn-news-nav" title="İleri Kaydır">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts {
+    <!-- C#'tan gelen başlangıç verilerini JSON formatında (PascalCase) gömüyoruz -->
+    <script type="application/json" id="newsDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+    <script src="~/js/news.js" asp-append-version="true"></script>
+}

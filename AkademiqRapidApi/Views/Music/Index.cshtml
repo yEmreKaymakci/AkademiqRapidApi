@@ -1,0 +1,87 @@
+@model List<AkademiqRapidApi.Models.MusicViewModel.Track>
+
+@{
+    ViewData["Title"] = "Müzik Kütüphanesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/music.css" />
+
+<div class="music-terminal">
+    <div class="container-fluid max-w-7xl mx-auto pt-4">
+
+        <!-- Header -->
+        <div class="music-header-box animate-in">
+            <div>
+                <h2 class="display-6 fw-bold mb-1 flex items-center gap-2" style="color: #fff;">
+                    <span class="material-symbols-outlined" style="color: var(--music-primary); font-size: 2.2rem;">headset</span> Müzik Kütüphanesi
+                </h2>
+                <p class="mb-0" style="color: #b3b3b3;">Deezer Müzik Listeleri ve 30Sn Ücretsiz Dinleme</p>
+            </div>
+            
+            <div class="music-categories">
+                <button class="btn-music-category active">Global Top 10</button>
+                <button class="btn-music-category" onclick="alert('Bu liste henüz aktif değil.')">Türkiye Top</button>
+                <a href="/Dashboard/Index" class="btn-music-category flex items-center justify-center gap-2" style="background: rgba(255,255,255,0.05); color: white;">
+                    <span class="material-symbols-outlined" style="font-size: 1.1rem;">arrow_back</span> Panoya Dön
+                </a>
+            </div>
+        </div>
+
+        <!-- Track List Layout -->
+        <div class="row">
+            <div class="col-12 animate-in" style="--animate-delay: 0.1s">
+                <div class="d-flex text-muted px-4 pb-2 mb-2 border-bottom" style="border-color: var(--music-border) !important; font-size: 0.85rem; font-weight: 500; letter-spacing: 1px;">
+                    <div style="width: 20px; text-align: center;">#</div>
+                    <div style="flex-shrink: 0; width: 66px;"></div> <!-- Cover offset -->
+                    <div style="flex-grow: 1;">Başlık</div>
+                    <div style="flex: 0 0 25%;">Albüm</div>
+                    <div style="flex: 0 0 50px; text-align: right;"><span class="material-symbols-outlined" style="font-size: 1.1rem">schedule</span></div>
+                </div>
+                
+                <div id="musicTrackList" class="music-track-list">
+                    <!-- JSON Render via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Global Mini Player -->
+<div class="music-global-player" id="musicGlobalPlayer">
+    <div class="gp-left">
+        <img id="gpCover" src="" class="gp-cover" alt="Cover" onerror="this.style.display='none'">
+        <div class="gp-info">
+            <div class="gp-title" id="gpTitle">Müzik Çalınmıyor</div>
+            <div class="gp-artist" id="gpArtist">-</div>
+        </div>
+    </div>
+    
+    <div class="gp-center">
+        <div class="gp-controls">
+            <button class="gp-btn"><span class="material-symbols-outlined" style="font-size: 20px">shuffle</span></button>
+            <button class="gp-btn"><span class="material-symbols-outlined" style="font-size: 24px">skip_previous</span></button>
+            <button class="gp-btn gp-play-btn" id="gpPlayBtn">
+                <span class="material-symbols-outlined" id="gpPlayIcon" style="font-variation-settings: 'FILL' 1; font-size: 24px">play_arrow</span>
+            </button>
+            <button class="gp-btn"><span class="material-symbols-outlined" style="font-size: 24px">skip_next</span></button>
+            <button class="gp-btn"><span class="material-symbols-outlined" style="font-size: 20px">repeat</span></button>
+        </div>
+        <div class="gp-progress-wrapper">
+            <span class="gp-time" id="gpCurrTime">0:00</span>
+            <div class="gp-progress-bar">
+                <div class="gp-progress-fill" id="gpFill"></div>
+            </div>
+            <span class="gp-time" id="gpTotalTime">0:00</span>
+        </div>
+    </div>
+    
+    <div class="gp-right">
+        <!-- İsteğe bağlı volume denetleyicisi eklenebilir -->
+    </div>
+</div>
+
+@section Scripts {
+    <script type="application/json" id="musicDataJson">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))</script>
+    <script src="~/js/music.js" asp-append-version="true"></script>
+}

@@ -18,6 +18,10 @@ builder.Services.AddHttpClient<IConvertCurrencyService, ConvertCurrencyService>(
 builder.Services.AddHttpClient<ICoinService, CoinService>();
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddHttpClient<IFootballService, FootballService>();
+builder.Services.AddHttpClient<INewsService, NewsService>();
+builder.Services.AddHttpClient<IMovieService, MovieService>();
+builder.Services.AddHttpClient<IMusicService, MusicService>();
+builder.Services.AddScoped<IMotivationService, MotivationService>();
 
 var app = builder.Build();
 
