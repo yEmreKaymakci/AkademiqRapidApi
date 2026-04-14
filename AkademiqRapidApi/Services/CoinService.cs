@@ -18,9 +18,10 @@ namespace AkademiqRapidApi.Services
             _configuration = configuration;
             _memoryCache = memoryCache;
 
-            _httpClient.BaseAddress = new Uri("https://coinlore-cryptocurrency.p.rapidapi.com/");
+            var apiHost = _configuration["RapidApi:CoinHost"];
+            _httpClient.BaseAddress = new Uri($"https://{apiHost}/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-key", _configuration["RapidApi:ApiKey"]);
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", "coinlore-cryptocurrency.p.rapidapi.com");
+            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", apiHost);
         }
 
         public async Task<CoinViewModel.Rootobject> GetAllCoinsAsync()

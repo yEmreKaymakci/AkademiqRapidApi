@@ -26,8 +26,8 @@ namespace AkademiqRapidApi.Services
             _configuration = configuration;
             _logger = logger;
 
-            // API key'i hem yeni config hem de fallback ile çekiyoruz
-            var apiKey = _configuration["NewsApi:ApiKey"] ?? "984b2f086a5a469aac077c0a499e04fc";
+            // API key'i config'den çekiyoruz
+            var apiKey = _configuration["NewsApi:ApiKey"];
 
             _httpClient.BaseAddress = new Uri("https://newsapi.org/v2/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "AkademiQ-Dashboard");

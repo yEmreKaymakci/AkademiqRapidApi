@@ -139,7 +139,7 @@
                 Kripto Piyasalari
             </div>
         </div>
-        <div class="relative z-10 p-5 flex-1 flex flex-col gap-3 overflow-hidden">
+        <div id="crypto-list" class="relative z-10 p-5 flex-1 flex flex-col gap-3 overflow-hidden">
             <div class="flex items-center justify-between p-3 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
                 <div class="crypto-icon bg-yellow-500/10 border border-yellow-500/25 text-yellow-400">BTC</div>
                 <div class="flex-1 px-3">
@@ -206,7 +206,7 @@
                 <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">local_gas_station</span>
                 Akaryakit Fiyatlari
             </div>
-            <div class="flex-1 flex flex-col gap-2.5">
+            <div id="gas-wrapper" class="flex-1 flex flex-col gap-2.5">
                 <div class="flex justify-between items-center p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-cyan-500/20 transition-colors">
                     <span class="text-[11px] text-on-surface-variant">Motorin</span>
                     <div class="flex items-center gap-2">
@@ -300,8 +300,8 @@
                 widget-card border border-outline-variant/10
                 relative overflow-hidden rounded-lg group cursor-pointer">
         <div class="absolute inset-0">
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiWM53Q_TbaOI-1cCRp8MrZKD9pBdqQVVu4YJgRHWRIZKiJxC8spYSy56J5zSRqxnsVgamMNosYPv6lYUt_-54593ENA3bYKIu-qOhxExymajKZ2NvJmv9qwoQdefcZSVVRxLts5Oejyxo-ogxI-vBQcWuFgH-G5I5n4CbR5oIlhlooJImzo0jBNXae_MSQ8H1hoc32MktYBt_ZYhwJswxeaKty-2a49ti0ISum8_C1ALR94yeoMBFda1y-oPcTpUr7MmTn9o4DqZm"
-                 alt="Manti"
+            <img id="dash-recipe-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiWM53Q_TbaOI-1cCRp8MrZKD9pBdqQVVu4YJgRHWRIZKiJxC8spYSy56J5zSRqxnsVgamMNosYPv6lYUt_-54593ENA3bYKIu-qOhxExymajKZ2NvJmv9qwoQdefcZSVVRxLts5Oejyxo-ogxI-vBQcWuFgH-G5I5n4CbR5oIlhlooJImzo0jBNXae_MSQ8H1hoc32MktYBt_ZYhwJswxeaKty-2a49ti0ISum8_C1ALR94yeoMBFda1y-oPcTpUr7MmTn9o4DqZm"
+                 alt="Recipe"
                  class="w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-700" />
             <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/50 to-transparent"></div>
         </div>
@@ -310,19 +310,19 @@
                 <span class="material-symbols-outlined text-secondary-container" style="font-size:12px">restaurant</span>
                 <span class="font-headline text-[9px] text-secondary-container uppercase tracking-[2px]">Gunun Yemek Onerisi</span>
             </div>
-            <h3 class="font-headline text-2xl font-bold mb-1 tracking-tight">Kayseri Mantisi</h3>
-            <p class="text-xs text-on-surface-variant mb-4 leading-relaxed line-clamp-2">
-                Yogurt, sarimsak ve tereyagli kirmizi biber sosu ile harmanlanmis geleneksel lezzet.
+            <h3 id="dash-recipe-title" class="font-headline text-2xl font-bold mb-1 tracking-tight">Yükleniyor...</h3>
+            <p id="dash-recipe-desc" class="text-xs text-on-surface-variant mb-4 leading-relaxed line-clamp-2">
+                Lütfen bekleyin, tarifler yükleniyor.
             </p>
             <div class="flex gap-4 mb-4 text-[9px] text-outline">
                 <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">schedule</span>90 dk
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">schedule</span><span id="dash-recipe-time">-- dk</span>
                 </span>
                 <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">people</span>4 kisi
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">people</span><span id="dash-recipe-portion">-- kisi</span>
                 </span>
                 <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">whatshot</span>Orta
+                    <span class="material-symbols-outlined text-secondary-container" style="font-size:11px">whatshot</span><span id="dash-recipe-diff">--</span>
                 </span>
             </div>
             <button class="w-fit flex items-center gap-2 px-4 py-2 rounded
@@ -346,52 +346,17 @@
                 Guncel Haberler
             </div>
             <span class="material-symbols-outlined text-outline hover:text-cyan-400 cursor-pointer transition-colors"
-                  style="font-size:16px">refresh</span>
+                  style="font-size:16px" onclick="fetchNews()">refresh</span>
         </div>
-        <div class="flex-1 flex flex-col divide-y divide-outline-variant/10 overflow-hidden">
-            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
-                <span class="font-headline text-[8px] text-purple-400 uppercase tracking-wider block mb-1.5">TEKNOLOJI</span>
-                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
-                    Yerli kuantum islemci testleri basariyla tamamlandi.
-                </h4>
-                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
-                    <span>14 DK ONCE</span><span>64 OKUNMA</span>
-                </div>
-            </div>
-            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
-                <span class="font-headline text-[8px] text-cyan-400 uppercase tracking-wider block mb-1.5">EKONOMI</span>
-                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
-                    Merkez Bankasi yeni dijital para birimini tanitti.
-                </h4>
-                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
-                    <span>1 SAAT ONCE</span><span>128 OKUNMA</span>
-                </div>
-            </div>
-            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
-                <span class="font-headline text-[8px] text-green-400 uppercase tracking-wider block mb-1.5">SPOR</span>
-                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
-                    Milli voleybolcularimiz final yolunda.
-                </h4>
-                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
-                    <span>3 SAAT ONCE</span><span>2.4K OKUNMA</span>
-                </div>
-            </div>
-            <div class="p-5 hover:bg-surface-bright/20 transition-colors cursor-pointer group">
-                <span class="font-headline text-[8px] text-secondary-container uppercase tracking-wider block mb-1.5">GUNDEM</span>
-                <h4 class="text-xs font-semibold leading-snug group-hover:text-cyan-400 transition-colors mb-2">
-                    Istanbul'da rayli sistem hatti genisletme projesi onaylandi.
-                </h4>
-                <div class="flex gap-3 text-[8px] text-outline uppercase tracking-tight">
-                    <span>5 SAAT ONCE</span><span>891 OKUNMA</span>
-                </div>
-            </div>
+        <div id="news-wrapper" class="flex-1 flex flex-col divide-y divide-outline-variant/10 overflow-hidden">
+            <!-- News items will be loaded here dynamically -->
         </div>
         <div class="p-5 border-t border-outline-variant/10 flex-shrink-0">
-            <button class="w-full py-2 border border-outline-variant/30 rounded
+            <a href="/News/Index" class="w-full py-2 border border-outline-variant/30 rounded inline-block text-center
                            text-[9px] font-headline uppercase tracking-wider text-outline
                            hover:border-cyan-400/40 hover:text-cyan-400 transition-all">
                 Tum Haberleri Oku
-            </button>
+            </a>
         </div>
     </div>
 
@@ -612,4 +577,10 @@
     <script src="~/js/movie-dash.js" asp-append-version="true"></script>
     <script src="~/js/music-dash.js" asp-append-version="true"></script>
     <script src="~/js/motivation-dash.js" asp-append-version="true"></script>
+    <script src="~/js/clock-dash.js" asp-append-version="true"></script>
+    <script src="~/js/currency-dash.js" asp-append-version="true"></script>
+    <script src="~/js/crypto-dash.js" asp-append-version="true"></script>
+    <script src="~/js/gas-dash.js" asp-append-version="true"></script>
+    <script src="~/js/recipe-dash.js" asp-append-version="true"></script>
+    <script src="~/js/news-dash.js" asp-append-version="true"></script>
 }

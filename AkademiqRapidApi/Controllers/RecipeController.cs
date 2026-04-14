@@ -20,5 +20,12 @@ namespace AkademiqRapidApi.Controllers
 
             return View(values);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDailyRecipe()
+        {
+            var values = await _recipeService.GetAllRecipesAsync();
+            return Json(values);
+        }
     }
 }

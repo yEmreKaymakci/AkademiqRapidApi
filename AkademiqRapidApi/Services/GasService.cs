@@ -18,7 +18,7 @@ namespace AkademiqRapidApi.Services
             _configuration = configuration;
             _memoryCache = memoryCache;
 
-            var apiHost = _configuration["RapidApi:GasHost"] ?? "gas-prices-by-country.p.rapidapi.com";
+            var apiHost = _configuration["RapidApi:GasHost"];
             _httpClient.BaseAddress = new Uri($"https://{apiHost}/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-key", _configuration["RapidApi:ApiKey"]);
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", apiHost);

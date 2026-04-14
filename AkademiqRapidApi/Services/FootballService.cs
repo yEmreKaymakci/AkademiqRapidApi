@@ -46,7 +46,7 @@ namespace AkademiqRapidApi.Services
             _cache = cache;
             _logger = logger;
 
-            var apiKey = _configuration["FootballDataOrg:ApiKey"] ?? "";
+            var apiKey = _configuration["FootballDataOrg:ApiKey"];
             _httpClient.BaseAddress = new Uri("https://api.football-data.org/v4/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-Auth-Token", apiKey);
             _httpClient.Timeout = TimeSpan.FromSeconds(15);

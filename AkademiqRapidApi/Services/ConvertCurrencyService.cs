@@ -18,9 +18,10 @@ namespace AkademiqRapidApi.Services
             _configuration = configuration;
             _memoryCache = memoryCache;
 
-            _httpClient.BaseAddress = new Uri("https://currency-conversion-and-exchange-rates.p.rapidapi.com/");
+            var apiHost = _configuration["RapidApi:CurrencyHost"];
+            _httpClient.BaseAddress = new Uri($"https://{apiHost}/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-key", _configuration["RapidApi:ApiKey"]);
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", "currency-conversion-and-exchange-rates.p.rapidapi.com");
+            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", apiHost);
         }
 
         public async Task<ConvertCurrencyViewModel.Rootobject> GetAllRatesAsync()

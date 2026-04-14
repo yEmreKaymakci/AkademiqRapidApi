@@ -1,4 +1,4 @@
-﻿using AkademiqRapidApi.Models;
+using AkademiqRapidApi.Models;
 using AkademiqRapidApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -23,6 +23,14 @@ namespace AkademiqRapidApi.Controllers
             var sortedValues = values.OrderBy(x => x.country).ToList();
 
             return View(sortedValues);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDashboardGas()
+        {
+            var values = await _gasService.GetAllGasAsync();
+            var sortedValues = values.OrderBy(x => x.country).ToList();
+            return Json(sortedValues);
         }
     }
 }

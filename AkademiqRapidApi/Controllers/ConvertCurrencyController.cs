@@ -1,4 +1,4 @@
-﻿using AkademiqRapidApi.Models;
+using AkademiqRapidApi.Models;
 using AkademiqRapidApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
@@ -18,6 +18,13 @@ namespace AkademiqRapidApi.Controllers
         {
             var rates = await _currencyService.GetAllRatesAsync();
             return View(rates);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDashboardRates()
+        {
+            var rates = await _currencyService.GetAllRatesAsync();
+            return Json(rates);
         }
     }
 }

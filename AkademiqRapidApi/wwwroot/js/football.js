@@ -309,7 +309,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const res  = await fetch('/Football/GetFeatured');
         if (!res.ok) return;
         const data = await res.json();
-        if (!data) return;
+        if (!data) {
+            const badgeEl = widget.querySelector('[data-fb="badge"]');
+            if (badgeEl) {
+                badgeEl.innerHTML = `<span class="font-headline text-[8px] text-outline uppercase tracking-wider">Bugün Maç Yok</span>`;
+            }
+            const leagueEl = widget.querySelector('[data-fb="league"]');
+            if (leagueEl) leagueEl.textContent = 'Futbol · Sonuç Bulunamadı';
+            
+            const scoreHome = widget.querySelector('[data-fb="scoreHome"]');
+            const scoreAway = widget.querySelector('[data-fb="scoreAway"]');
+            if (scoreHome) scoreHome.textContent = '-';
+            if (scoreAway) scoreAway.textContent = '-';
+            return;
+        }
 
         const league = data.League || data.league || {};
         const teams  = data.Teams  || data.teams  || {};

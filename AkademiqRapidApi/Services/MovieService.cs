@@ -26,7 +26,7 @@ namespace AkademiqRapidApi.Services
             _configuration = configuration;
             _logger = logger;
 
-            var apiKey = _configuration["Tmdb:BearerToken"] ?? "YOUR_TMDB_AUTH_TOKEN"; // Beklenilen JWT token
+            var apiKey = _configuration["Tmdb:BearerToken"];
 
             _httpClient.BaseAddress = new Uri("https://api.themoviedb.org/3/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json");

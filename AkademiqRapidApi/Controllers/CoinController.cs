@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using AkademiqRapidApi.Services.Interfaces;
 
 namespace AkademiqRapidApi.Controllers
@@ -16,6 +16,13 @@ namespace AkademiqRapidApi.Controllers
         {
             var data = await _coinService.GetAllCoinsAsync();
             return View(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDashboardCoins()
+        {
+            var data = await _coinService.GetAllCoinsAsync();
+            return Json(data);
         }
     }
 }

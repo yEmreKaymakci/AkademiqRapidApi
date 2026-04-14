@@ -13,7 +13,7 @@ namespace AkademiqRapidApi.Services
             _httpClient = httpClient;
             _configuration = configuration;
 
-            var apiHost = _configuration["RapidApi:RecipeHost"] ?? "tasty.p.rapidapi.com";
+            var apiHost = _configuration["RapidApi:RecipeHost"];
             _httpClient.BaseAddress = new Uri($"https://{apiHost}/");
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-key", _configuration["RapidApi:ApiKey"]);
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("x-rapidapi-host", apiHost);
