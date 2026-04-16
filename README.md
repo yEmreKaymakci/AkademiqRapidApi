@@ -6,6 +6,7 @@
   <br>
 </div>
 
+
 ## 📖 Proje Hakkında
 
 **AkademiqRapidApi**, birçok farklı API servisten( [Rapid Api](https://rapidapi.com/), [football-data](https://www.football-data.org/), [favqs.com](https://favqs.com/), [TMDB](https://www.themoviedb.org/), [Deezer](https://www.deezer.com/), [newsapi](https://newsapi.org/), [Open-Meteo](https://open-meteo.com/)) verileri eş zamanlı çekerek kullanıcıya şık ve fütüristik bir arayüzle sunan gelişmiş bir ASP.NET Core MVC projesidir. Günlük hava durumundan kripto paralara, haber bültenlerinden global akaryakıt verilerine kadar çeşitli alanları kapsayan bu proje; aynı zamanda **Google Gemini destekli Asistan Nova** ile kullanıcılara anlık yapay zeka analizleri ve interaktif sohbet deneyimi sunar. Etkileyici "Cyberpunk" arayüzü sayesinde bilgiyi estetik bir görsellikle verir. 
