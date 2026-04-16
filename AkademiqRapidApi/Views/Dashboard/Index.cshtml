@@ -478,95 +478,30 @@
         </div>
     </a>
 
-    @* W11 - BIST Hisseleri (4 sutun x 2 satir) *@
-    <div class="bento-item col-span-12 md:col-span-6 lg:col-span-4 row-span-2
-                widget-card bg-surface-container-low border border-outline-variant/10
-                relative overflow-hidden rounded-lg">
-        <div class="p-5 h-full flex flex-col">
-            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5 mb-4">
-                <span class="material-symbols-outlined text-amber-400" style="font-size:13px">candlestick_chart</span>
-                Borsa &middot; BIST Hisseleri
-            </div>
-            <div class="flex-1 flex flex-col gap-2.5">
-                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
-                    <div>
-                        <div class="font-headline text-xs font-bold text-cyan-400">THYAO</div>
-                        <div class="text-[9px] text-outline">Turk Hava Yollari</div>
-                    </div>
-                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
-                        <polyline points="0,16 12,12 24,8 36,10 48,5 60,3" stroke="#22c55e" stroke-width="1.2" />
-                    </svg>
-                    <div class="text-right">
-                        <div class="font-headline text-sm font-bold text-green-400">312.40</div>
-                        <div class="text-[9px] text-green-400">+3.2%</div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-red-400/20 transition-colors">
-                    <div>
-                        <div class="font-headline text-xs font-bold text-cyan-400">GARAN</div>
-                        <div class="text-[9px] text-outline">Garanti Bankasi</div>
-                    </div>
-                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
-                        <polyline points="0,4 12,8 24,12 36,10 48,14 60,16" stroke="#f43f5e" stroke-width="1.2" />
-                    </svg>
-                    <div class="text-right">
-                        <div class="font-headline text-sm font-bold text-error">119.20</div>
-                        <div class="text-[9px] text-error">-1.1%</div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between p-2.5 rounded bg-surface-container border border-outline-variant/10 hover:border-green-400/20 transition-colors">
-                    <div>
-                        <div class="font-headline text-xs font-bold text-cyan-400">SISE</div>
-                        <div class="text-[9px] text-outline">Sisecam</div>
-                    </div>
-                    <svg viewBox="0 0 60 20" fill="none" width="50" height="16">
-                        <polyline points="0,12 12,10 24,7 36,5 48,6 60,3" stroke="#22c55e" stroke-width="1.2" />
-                    </svg>
-                    <div class="text-right">
-                        <div class="font-headline text-sm font-bold text-green-400">54.85</div>
-                        <div class="text-[9px] text-green-400">+0.8%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    @* W12 - AI Asistan Nova (5 sutun x 2 satir) *@
-    <div class="bento-item col-span-12 md:col-span-7 lg:col-span-5 row-span-2
+
+    @* W12 - AI Asistan Nova (Link) *@
+    <a href="/ChatBot/Index" class="bento-item col-span-12 md:col-span-12 lg:col-span-8 row-span-2
                 widget-card bg-surface-container-low border border-outline-variant/10
-                relative overflow-hidden rounded-lg">
+                relative overflow-hidden rounded-lg group transition-transform hover:scale-[1.01] block">
         <div class="absolute inset-0 pointer-events-none"
              style="background:radial-gradient(ellipse at 80% 20%,rgba(0,219,231,.03) 0%,transparent 60%)"></div>
-        <div class="relative z-10 h-full flex flex-col p-5">
-            <div class="font-headline text-[9px] uppercase tracking-[2.5px] text-outline flex items-center gap-1.5 mb-3">
-                <span class="material-symbols-outlined text-cyan-400" style="font-size:13px">smart_toy</span>
-                AI Asistan &middot; Nova
+        <div class="absolute inset-0 glow-cyan-inner pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative z-10 h-full flex flex-col p-6">
+            <div class="font-headline text-sm uppercase tracking-[2.5px] text-cyan-400 flex items-center gap-2 mb-4 font-bold">
+                <span class="material-symbols-outlined text-cyan-400 group-hover:animate-pulse" style="font-size:24px">smart_toy</span>
+                AI Asistan Nova
             </div>
-            <div id="ai-messages" class="flex-1 flex flex-col gap-2 overflow-hidden">
-                <div class="ai-msg-bot rounded p-2.5 text-[11px] leading-relaxed self-start max-w-[85%]">
-                    Merhaba! Ben Nova. Bugun size nasil yardimci olabilirim?
+            <div class="flex-1 flex flex-col gap-3 justify-center items-center">
+                <div class="text-lg text-on-surface font-headline bg-surface-container p-4 rounded-xl border border-outline-variant/20 shadow-lg text-center leading-relaxed max-w-lg pulse-dot">
+                    "Merhaba! Ben Asistan Nova sana nasıl yardımcı olabilirim?"
                 </div>
-                <div class="ai-msg-user rounded p-2.5 text-[11px] leading-relaxed self-end max-w-[85%]">
-                    Hava durumu nasil?
+                <div class="text-xs text-outline font-headline tracking-widest mt-2 group-hover:text-cyan-400/80 transition-colors">
+                    [ BAĞLANTIYI AÇMAK İÇİN TIKLAYIN ]
                 </div>
-                <div class="ai-msg-bot rounded p-2.5 text-[11px] leading-relaxed self-start max-w-[85%]">
-                    Izmir'de bugun 14 derece parcali bulutlu hava bekleniyor.
-                </div>
-            </div>
-            <div class="flex gap-2 mt-3">
-                <input id="ai-input" type="text" placeholder="Nova'ya bir sey sorun..."
-                       class="flex-1 bg-surface-container border border-outline-variant/20 rounded px-3 py-2
-                              text-[11px] text-on-surface placeholder-outline/50
-                              focus:outline-none focus:border-cyan-500/40 transition-colors" />
-                <button id="ai-send"
-                        class="w-9 h-9 rounded bg-primary-container flex items-center justify-center flex-shrink-0
-                               hover:scale-110 active:scale-95 transition-transform
-                               shadow-[0_0_12px_rgba(0,242,255,.3)]">
-                    <span class="material-symbols-outlined text-on-primary-container" style="font-size:16px">send</span>
-                </button>
             </div>
         </div>
-    </div>
+    </a>
 
 
 </div>

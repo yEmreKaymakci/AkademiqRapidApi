@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/chatbot.css" asp-append-version="true" />
+
+<div class="nova-container" data-stream-url="@Url.Action("StreamMessage", "ChatBot")">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 0%,rgba(0,242,255,.05) 0%,transparent 70%)"></div>
+    
+    <div class="nova-header">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center shadow-[0_0_15px_rgba(0,242,255,0.2)]">
+                <span class="material-symbols-outlined text-cyan-400">smart_toy</span>
+            </div>
+            <div>
+                <h2 class="font-headline text-lg font-bold text-on-surface tracking-wide">Asistan Nova</h2>
+                <div class="text-[10px] text-cyan-400 font-headline uppercase tracking-widest flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot mt-[1px]"></span>
+                    Sistem Çevrimiçi
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-4 text-outline border border-outline-variant/20 px-3 py-1.5 rounded bg-surface-container-low font-headline text-[10px] tracking-widest uppercase">
+            Sürüm: 2.1.0 &middot; Model: Gemini
+        </div>
+    </div>
+
+    <div class="nova-messages" id="novaMessages">
+        <div class="msg-wrapper bot">
+            <div class="msg-bubble">Merhaba! Ben Asistan Nova sana nasıl yardımcı olabilirim? Projedeki tüm güncel analizlere veya genel konulara hakemim. Bana herhangi bir soru sorabilirsin.</div>
+            <div class="msg-info">NOVA &middot; SISTEM</div>
+        </div>
+        
+        <div class="typing-indicator" id="novaTyping">
+            Nova analiz ediyor...
+        </div>
+    </div>
+
+    <div class="nova-input-area">
+        <input type="text" id="novaInput" class="nova-input font-body" placeholder="Sistem veri tabanında ara veya Nova ile konuş..." autocomplete="off" />
+        <button id="novaSendBtn" class="nova-send-btn material-symbols-outlined">send</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chatbot.js" asp-append-version="true"></script>
+}

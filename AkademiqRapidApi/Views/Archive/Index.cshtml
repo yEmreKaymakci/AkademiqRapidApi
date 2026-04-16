@@ -1,0 +1,53 @@
+@model IEnumerable<AkademiqRapidApi.Models.Entities.ChatSession>
+
+@{
+    ViewData["Title"] = "Nova Arşivi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="font-headline text-2xl font-bold tracking-tight text-on-surface">
+            Sistem Arşivi
+        </h1>
+        <p class="text-xs text-outline font-['Space_Grotesk'] tracking-widest mt-1 uppercase">Sohbet Kayıtları & Geçmiş Görevler</p>
+    </div>
+</div>
+
+<div class="bg-surface-container border border-outline-variant/20 rounded-xl overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 0%,rgba(217,70,239,.03) 0%,transparent 70%)"></div>
+
+    <table class="w-full text-left relative z-10">
+        <thead class="bg-surface-container-low border-b border-outline-variant/20">
+            <tr>
+                <th class="px-6 py-4 font-headline text-[10px] text-outline tracking-widest uppercase">OTURUM KİMLİĞİ</th>
+                <th class="px-6 py-4 font-headline text-[10px] text-outline tracking-widest uppercase">BAŞLIK</th>
+                <th class="px-6 py-4 font-headline text-[10px] text-outline tracking-widest uppercase">TARİH</th>
+                <th class="px-6 py-4 font-headline text-[10px] text-outline tracking-widest uppercase text-right">İŞLEMLER</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-outline-variant/10">
+            @foreach(var session in Model)
+            {
+                <tr class="hover:bg-surface-container-high/50 transition-colors group">
+                    <td class="px-6 py-4 font-['Space_Grotesk'] text-xs text-outline">
+                        #SESS-@session.Id.ToString("D4")
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-headline text-sm font-bold text-on-surface group-hover:text-fuchsia-400 transition-colors">
+                            @session.Title
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-['Space_Grotesk'] text-xs text-outline">
+                        @session.CreatedAt.ToString("dd MMM yyyy - HH:mm")
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="px-4 py-2 border border-outline-variant/20 rounded text-[9px] font-headline text-on-surface uppercase tracking-wider hover:border-fuchsia-400/50 hover:bg-fuchsia-500/10 transition-colors">
+                            Cevapları Gör
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
