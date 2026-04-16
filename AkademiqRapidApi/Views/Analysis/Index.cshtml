@@ -30,8 +30,8 @@
             </div>
 
             <div class="relative z-10 mb-4">
-                <h3 class="font-headline text-lg font-bold text-on-surface mb-2">@record.Summary</h3>
-                <p class="text-xs text-on-surface-variant leading-relaxed opacity-80">
+                <h3 class="font-headline text-lg font-bold text-zinc-100 mb-2">@record.Summary</h3>
+                <p class="text-xs text-on-surface-variant leading-relaxed opacity-80 line-clamp-3">
                     @record.Details
                 </p>
             </div>
@@ -41,7 +41,7 @@
                     <span class="material-symbols-outlined text-green-400" style="font-size:14px">check_circle</span>
                     <span class="text-[9px] text-outline font-headline uppercase tracking-widest">Durum Normal</span>
                 </div>
-                <button class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest hover:text-cyan-300">İncele →</button>
+                <a href="/Analysis/Details/@record.Id" class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest hover:text-cyan-300">İncele →</a>
             </div>
         </div>
     }

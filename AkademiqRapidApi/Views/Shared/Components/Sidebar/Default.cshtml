@@ -4,55 +4,36 @@
         <p class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px] text-cyan-400/60 mt-1">SYSTEM_ACTIVE</p>
     </div>
     <nav class="flex-1 px-3 space-y-1">
-        <!-- Navigation Mapping from JSON -->
-        <a class="flex items-center px-4 py-3 text-cyan-400 bg-cyan-500/10 border-r-2 border-cyan-400 shadow-[inset_-10px_0_15px_-10px_rgba(0,242,255,0.3)] group" href="/Dashboard/Index">
-            <span class="material-symbols-outlined mr-3">space_dashboard</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Dashboard</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/ChatBot/Index/">
-            <span class="material-symbols-outlined mr-3">local_gas_station</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Nova</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Gas/Index/">
-            <span class="material-symbols-outlined mr-3">local_gas_station</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Akaryakıt</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/ConvertCurrency/Index/">
-            <span class="material-symbols-outlined mr-3">payments</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Döviz</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Coin/Index/">
-            <span class="material-symbols-outlined mr-3">currency_bitcoin</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Kripto</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Recipe/Index/">
-            <span class="material-symbols-outlined mr-3">restaurant</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Yemek</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Weather/Index/">
-            <span class="material-symbols-outlined mr-3">cloudy_snowing</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Hava</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Football/Index">
-            <span class="material-symbols-outlined mr-3">sports_soccer</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Futbol</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/News/Index">
-            <span class="material-symbols-outlined mr-3">newspaper</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Haberler</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Movie/Index">
-            <span class="material-symbols-outlined mr-3">movie</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Filmler</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Music/Index">
-            <span class="material-symbols-outlined mr-3">music_note</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Müzik</span>
-        </a>
-        <a class="flex items-center px-4 py-3 text-slate-500 hover:text-cyan-200 transition-colors group" href="/Motivation/Index">
-            <span class="material-symbols-outlined mr-3">format_quote</span>
-            <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">Motivasyon</span>
-        </a>
+        @{
+            var ctrl = ViewContext.RouteData.Values["Controller"]?.ToString();
+            var menuItems = new[] {
+                ("Dashboard", "space_dashboard", "Dashboard"),
+                ("ChatBot", "smart_toy", "Nova"),
+                ("Gas", "local_gas_station", "Akaryakıt"),
+                ("ConvertCurrency", "payments", "Döviz"),
+                ("Coin", "currency_bitcoin", "Kripto"),
+                ("Recipe", "restaurant", "Yemek"),
+                ("Weather", "cloudy_snowing", "Hava"),
+                ("Football", "sports_soccer", "Futbol"),
+                ("News", "newspaper", "Haberler"),
+                ("Movie", "movie", "Filmler"),
+                ("Music", "music_note", "Müzik"),
+                ("Motivation", "format_quote", "Motivasyon")
+            };
+
+            foreach (var item in menuItems)
+            {
+                var isActive = ctrl == item.Item1;
+                var aClass = isActive 
+                    ? "text-cyan-400 bg-cyan-500/10 border-r-2 border-cyan-400 shadow-[inset_-10px_0_15px_-10px_rgba(0,242,255,0.3)]" 
+                    : "text-slate-500 hover:text-cyan-200 transition-colors border-r-2 border-transparent";
+
+                <a class="flex items-center px-4 py-3 @aClass group transition-all" href="/@item.Item1/Index">
+                    <span class="material-symbols-outlined mr-3">@item.Item2</span>
+                    <span class="font-['Space_Grotesk'] tracking-wider uppercase text-[10px]">@item.Item3</span>
+                </a>
+            }
+        }
     </nav>
     <div class="mt-auto px-6 flex items-center gap-3 border-t border-cyan-500/10 pt-6">
         <div class="w-10 h-10 rounded-full overflow-hidden border border-cyan-400/30">

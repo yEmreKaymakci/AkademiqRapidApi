@@ -3,24 +3,20 @@
         <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 font-headline text-lg tracking-tighter">DASHBOARD</span>
         <div class="hidden lg:flex items-center bg-surface-container-high/50 border border-outline-variant/20 px-3 py-1.5 rounded-lg">
             <span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
-            <input class="bg-transparent border-none focus:ring-0 text-xs font-body w-48 text-on-surface placeholder-outline/50" placeholder="Sistemde ara..." type="text" />
+            <input id="globalSearchInput" class="bg-transparent border-none focus:ring-0 text-xs font-body w-48 text-on-surface placeholder-outline/50 outline-none" placeholder="Sistemde ara..." type="text" autocomplete="off" />
         </div>
     </div>
+    
+    @{
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    }
+
     <nav class="flex items-center gap-6">
-        <a class="text-cyan-400 border-b border-cyan-400 font-['Space_Grotesk'] text-sm font-light py-5" href="/Dashboard/Index">Sistem</a>
-        <a class="text-slate-400 hover:text-cyan-400 transition-all font-['Space_Grotesk'] text-sm font-light py-5" href="/Analysis/Index">Analiz</a>
-        <a class="text-slate-400 hover:text-cyan-400 transition-all font-['Space_Grotesk'] text-sm font-light py-5" href="/Archive/Index">Arşiv</a>
+        <a class="@(currentController == "Dashboard" ? "text-cyan-400 border-cyan-400" : "text-slate-400 border-transparent hover:text-cyan-400") border-b-[2px] transition-all font-['Space_Grotesk'] text-sm font-bold py-5 tracking-wide" href="/Dashboard/Index">Sistem</a>
+        <a class="@(currentController == "Analysis" ? "text-cyan-400 border-cyan-400" : "text-slate-400 border-transparent hover:text-cyan-400") border-b-[2px] transition-all font-['Space_Grotesk'] text-sm font-bold py-5 tracking-wide" href="/Analysis/Index">Analiz</a>
+        <a class="@(currentController == "Archive" ? "text-cyan-400 border-cyan-400" : "text-slate-400 border-transparent hover:text-cyan-400") border-b-[2px] transition-all font-['Space_Grotesk'] text-sm font-bold py-5 tracking-wide" href="/Archive/Index">Arşiv</a>
     </nav>
     <div class="flex items-center gap-4">
-        <button class="text-slate-400 hover:text-cyan-400 transition-all relative">
-            <span class="material-symbols-outlined">notifications</span>
-            <span class="absolute top-0 right-0 w-2 h-2 bg-fuchsia-500 rounded-full"></span>
-        </button>
-        <button class="text-slate-400 hover:text-cyan-400 transition-all">
-            <span class="material-symbols-outlined">settings</span>
-        </button>
-        <button class="text-slate-400 hover:text-error transition-all">
-            <span class="material-symbols-outlined">power_settings_new</span>
-        </button>
+        <!-- İkonlar kaldırıldı -->
     </div>
 </header>

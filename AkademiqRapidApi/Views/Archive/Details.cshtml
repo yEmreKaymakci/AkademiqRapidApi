@@ -1,0 +1,68 @@
+@model AkademiqRapidApi.Models.Entities.ChatSession
+
+@{
+    ViewData["Title"] = "Oturum Detayı: " + Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/chatbot.css" asp-append-version="true" />
+
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <a href="/Archive/Index" class="inline-flex items-center text-xs text-outline font-headline uppercase tracking-widest hover:text-cyan-400 transition-colors mb-4">
+            <span class="material-symbols-outlined text-[14px] mr-1">arrow_back</span>
+            Arşive Dön
+        </a>
+        <h1 class="font-headline text-2xl font-bold tracking-tight text-on-surface flex items-center gap-3">
+            <span class="material-symbols-outlined text-fuchsia-400 text-3xl">history</span>
+            @Model.Title
+        </h1>
+        <div class="flex items-center gap-4 mt-3">
+            <span class="px-3 py-1 bg-surface-container border border-outline-variant/30 rounded text-xs font-[Space_Grotesk] text-slate-300">
+                <strong class="text-fuchsia-400">ID:</strong> #@Model.Id.ToString("D4")
+            </span>
+            <span class="px-3 py-1 bg-surface-container border border-outline-variant/30 rounded text-xs font-[Space_Grotesk] text-slate-300">
+                <strong class="text-fuchsia-400">Tarih:</strong> @Model.CreatedAt.ToString("dd MMM yyyy - HH:mm")
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="nova-container h-[600px] mb-10">
+    <div class="nova-header border-b border-fuchsia-500/10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-fuchsia-500/10 border border-fuchsia-400/30 flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+                <span class="material-symbols-outlined text-fuchsia-400">archive</span>
+            </div>
+            <div>
+                <h2 class="font-headline text-lg font-bold text-on-surface tracking-wide">Arka Plan Kaydı</h2>
+                <div class="text-[10px] text-fuchsia-400 font-headline uppercase tracking-widest">
+                    Salt Okunur
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nova-messages" style="padding-bottom: 30px;">
+        @if (Model.Messages != null && Model.Messages.Any())
+        {
+            @foreach (var msg in Model.Messages.OrderBy(m => m.SentAt))
+            {
+                <div class="msg-wrapper @(msg.Sender == "Nova" ? "bot" : "user")">
+                    <div class="msg-bubble" style="@(msg.Sender == "Nova" ? "border-color: rgba(217,70,239,0.2);" : "")">
+                        @msg.Content
+                    </div>
+                    <div class="msg-info">
+                        @(msg.Sender == "Nova" ? "NOVA" : "OPERATOR_01") &middot; @msg.SentAt.ToString("HH:mm")
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center text-outline text-xs mt-10">
+                Bu oturuma ait mesaj bulunamadı.
+            </div>
+        }
+    </div>
+</div>

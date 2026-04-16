@@ -6,5 +6,6 @@ namespace AkademiqRapidApi.Services.Interfaces
     {
         Task<List<AnalysisRecord>> GetRecentAnalysesAsync();
         Task AddAnalysisAsync(AnalysisRecord record);
+        Task<AnalysisRecord> GetAnalysisByIdAsync(int id);
     }
 }

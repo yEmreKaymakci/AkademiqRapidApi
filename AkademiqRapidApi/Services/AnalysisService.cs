@@ -24,5 +24,10 @@ namespace AkademiqRapidApi.Services
         {
             return await _context.AnalysisRecords.OrderByDescending(x => x.CreatedAt).Take(20).ToListAsync();
         }
+
+        public async Task<AnalysisRecord> GetAnalysisByIdAsync(int id)
+        {
+            return await _context.AnalysisRecords.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AkademiqRapidApi.Models;
+using AkademiqRapidApi.Models;
 using AkademiqRapidApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +7,12 @@ namespace AkademiqRapidApi.Controllers
     public class ChatBotController : Controller
     {
         private readonly IGeminiService _geminiService;
+        private readonly IArchiveService _archiveService;
 
-        public ChatBotController(IGeminiService geminiService)
+        public ChatBotController(IGeminiService geminiService, IArchiveService archiveService)
         {
             _geminiService = geminiService;
+            _archiveService = archiveService;
         }
 
         public IActionResult Index()
@@ -40,11 +42,37 @@ namespace AkademiqRapidApi.Controllers
         [HttpPost]
         public async Task StreamMessage([FromBody] ChatRequest request)
         {
+            // Session Oluştur
+            var session = new AkademiqRapidApi.Models.Entities.ChatSession { 
+                Title = request.Message.Length > 25 ? request.Message.Substring(0, 25) + "..." : request.Message, 
+                CreatedAt = System.DateTime.UtcNow 
+            };
+            await _archiveService.CreateSessionAsync(session);
+
+            // User Mesajı Kaydet
+            await _archiveService.AddMessageAsync(new AkademiqRapidApi.Models.Entities.ChatMessage { 
+                ChatSessionId = session.Id, 
+                Content = request.Message, 
+                Sender = "User", 
+                SentAt = System.DateTime.UtcNow 
+            });
+
+            var botResponse = new System.Text.StringBuilder();
+
             await foreach (var chunk in _geminiService.GetChatResponseStreamAsync(request.Message))
             {
+                botResponse.Append(chunk);
                 await Response.WriteAsync(chunk);
                 await Response.Body.FlushAsync();
             }
+
+            // Bot Mesajı Kaydet
+            await _archiveService.AddMessageAsync(new AkademiqRapidApi.Models.Entities.ChatMessage { 
+                ChatSessionId = session.Id, 
+                Content = botResponse.ToString(), 
+                Sender = "Nova", 
+                SentAt = System.DateTime.UtcNow 
+            });
         }
     }
 }

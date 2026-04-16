@@ -1,0 +1,48 @@
+@model AkademiqRapidApi.Models.Entities.AnalysisRecord
+
+@{
+    ViewData["Title"] = "Analiz Detayları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <a href="/Analysis/Index" class="inline-flex items-center text-xs text-outline font-headline uppercase tracking-widest hover:text-cyan-400 transition-colors mb-4">
+            <span class="material-symbols-outlined text-[14px] mr-1">arrow_back</span>
+            Analiz Yönlendirme Paneline Dön
+        </a>
+        <h1 class="font-headline text-2xl font-bold tracking-tight text-on-surface flex items-center gap-3">
+            <span class="material-symbols-outlined text-cyan-400 text-3xl">analytics</span>
+            Detaylı Rapor: @Model.Summary
+        </h1>
+        <div class="flex items-center gap-4 mt-3">
+            <span class="px-3 py-1 bg-surface-container border border-outline-variant/30 rounded text-xs font-[Space_Grotesk] text-slate-300">
+                <strong class="text-cyan-400">ID:</strong> #@Model.Id.ToString("D4")
+            </span>
+            <span class="px-3 py-1 bg-surface-container border border-outline-variant/30 rounded text-xs font-[Space_Grotesk] text-slate-300">
+                <strong class="text-cyan-400">Tarih:</strong> @Model.CreatedAt.ToString("dd MMM yyyy - HH:mm")
+            </span>
+            <span class="px-3 py-1 bg-surface-container border border-outline-variant/30 rounded text-xs font-[Space_Grotesk] text-slate-300">
+                <strong class="text-cyan-400">Kategori:</strong> @Model.Type
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="bento-item widget-card bg-surface-container-low border border-outline-variant/20 relative overflow-hidden rounded-xl p-8">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 100% 0%,rgba(0,242,255,.05) 0%,transparent 60%)"></div>
+    
+    <div class="prose prose-invert prose-p:text-slate-300 prose-headings:text-zinc-100 prose-a:text-cyan-400 max-w-none font-body leading-relaxed whitespace-pre-wrap relative z-10">
+        @Model.Details
+    </div>
+
+    <div class="relative z-10 border-t border-outline-variant/20 mt-10 pt-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-green-400">gpp_good</span>
+            <span class="text-xs font-headline uppercase tracking-widest text-outline">Veri Bütünlüğü Doğrulandı</span>
+        </div>
+        <button class="bg-primary-container text-on-primary-container border border-cyan-400/30 px-6 py-2 rounded text-xs font-headline uppercase tracking-widest hover:bg-cyan-500/20 transition-colors shadow-[0_0_15px_rgba(0,242,255,0.1)]">
+            Raporu İndir
+        </button>
+    </div>
+</div>
